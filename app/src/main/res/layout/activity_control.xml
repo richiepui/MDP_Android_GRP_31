@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ToggleButton
+        android:id="@+id/fastestToggleBtn2"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="47dp"
+        android:layout_marginLeft="47dp"
+        android:layout_marginTop="33dp"
+        android:text="FASTEST"
+        android:textOff="WK9 START"
+        android:textOn="STOP"
+        app:layout_constraintStart_toEndOf="@+id/exploreResetImageBtn2"
+        app:layout_constraintTop_toBottomOf="@+id/fastestTimeTextView2" />
+
+    <ImageButton
+        android:id="@+id/fastestResetImageBtn2"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintStart_toEndOf="@+id/fastestToggleBtn2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_refresh" />
+
+    <ImageButton
+        android:id="@+id/exploreResetImageBtn2"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="312dp"
+        android:layout_marginRight="312dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/exploreToggleBtn2"
+        app:layout_constraintTop_toBottomOf="@+id/fastestTimeTextView2"
+        app:srcCompat="@drawable/ic_refresh" />
+
+    <ToggleButton
+        android:id="@+id/exploreToggleBtn2"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="32dp"
+        android:text="Exploration"
+        android:textOff="WK8 START"
+        android:textOn="STOP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exploreTimeTextView2" />
+
+    <TextView
+        android:id="@+id/fastestTimeTextView2"
+        android:layout_width="157dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="120dp"
+        android:layout_marginRight="120dp"
+        android:layout_marginBottom="92dp"
+        android:background="#2A969494"
+        android:gravity="center"
+        android:text="00:00"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@+id/fastestResetImageBtn2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fastestTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/fastestTextView"
+        android:layout_width="157dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginRight="120dp"
+        android:background="@color/light_blue"
+        android:gravity="center"
+        android:text="Wk 9 Task Time"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/exploreTimeTextView2"
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#2A969494"
+        android:gravity="center"
+        android:text="00:00"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toStartOf="@+id/fastestTimeTextView2"
+        app:layout_constraintTop_toBottomOf="@+id/exploreTextView" />
+
+    <TextView
+        android:id="@+id/exploreTextView"
+        android:layout_width="172dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/light_blue"
+        android:gravity="center"
+        android:text="Wk8 Task Time"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/fastestTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
