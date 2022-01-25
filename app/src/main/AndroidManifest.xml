@@ -10,12 +10,20 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Used to look for Bluetooth devices -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+
+    <!-- Used for making the device discoverable to other Bluetooth Devices -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+
 
     <application
         android:allowBackup="true"
@@ -26,6 +34,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.example.mdp_android_grp_31.MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">

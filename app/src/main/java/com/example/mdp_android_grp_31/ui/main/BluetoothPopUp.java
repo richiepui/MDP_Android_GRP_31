@@ -238,7 +238,8 @@ public class BluetoothPopUp extends AppCompatActivity {
         });
     }
 
-    public void toggleButtonScan(View view){
+
+    public void Scanning(){
         Log.d(TAG, "toggleButton: Scanning for unpaired devices.");
         mNewBTDevices.clear();
         if(mBluetoothAdapter != null) {
@@ -271,6 +272,11 @@ public class BluetoothPopUp extends AppCompatActivity {
                 pairedDevicesListView.setAdapter(mPairedDevlceListAdapter);
             }
         }
+
+    }
+
+    public void toggleButtonScan(View view){
+        Scanning();
     }
 
     private void checkBTPermissions() {
@@ -345,11 +351,12 @@ public class BluetoothPopUp extends AppCompatActivity {
 
             if(action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mNewBTDevices.add(device);
-                Log.d(TAG, "onReceive: "+ device.getName() +" : " + device.getAddress());
-                mNewDevlceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mNewBTDevices);
-                otherDevicesListView.setAdapter(mNewDevlceListAdapter);
-
+                if(device.getBondState()!=BluetoothDevice.BOND_BONDED) {
+                    mNewBTDevices.add(device);
+                    Log.d(TAG, "onReceive: " + device.getName() + " : " + device.getAddress());
+                    mNewDevlceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mNewBTDevices);
+                    otherDevicesListView.setAdapter(mNewDevlceListAdapter);
+                }
             }
         }
     };
@@ -365,6 +372,9 @@ public class BluetoothPopUp extends AppCompatActivity {
                     Log.d(TAG, "BOND_BONDED.");
                     Toast.makeText(BluetoothPopUp.this, "Successfully paired with " + mDevice.getName(), Toast.LENGTH_SHORT).show();
                     mBTDevice = mDevice;
+                    Scanning();
+
+
                 }
                 if(mDevice.getBondState() == BluetoothDevice.BOND_BONDING){
                     Log.d(TAG, "BOND_BONDING.");
@@ -409,6 +419,7 @@ public class BluetoothPopUp extends AppCompatActivity {
                 editor.putString("connStatus", "Disconnected");
                 TextView connStatusTextView = findViewById(R.id.connStatusTextView);
                 connStatusTextView.setText("Disconnected");
+
                 editor.commit();
 
                 try {

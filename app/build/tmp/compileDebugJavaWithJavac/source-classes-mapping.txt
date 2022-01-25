@@ -28,9 +28,20 @@ com/example/mdp_android_grp_31/ui/main/MapTabFragment.java
  com.example.mdp_android_grp_31.ui.main.MapTabFragment$7
  com.example.mdp_android_grp_31.ui.main.MapTabFragment$8
  com.example.mdp_android_grp_31.ui.main.MapTabFragment$9
-com/example/mdp_android_grp_31/ui/main/PlaceholderFragment.java
- com.example.mdp_android_grp_31.ui.main.PlaceholderFragment
- com.example.mdp_android_grp_31.ui.main.PlaceholderFragment$1
+com/example/mdp_android_grp_31/ui/main/BluetoothPopUp.java
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$1
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$10
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$11
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$12
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$2
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$3
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$4
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$5
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$6
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$7
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$8
+ com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$9
 com/example/mdp_android_grp_31/ui/main/ControlFragment.java
  com.example.mdp_android_grp_31.ui.main.ControlFragment
  com.example.mdp_android_grp_31.ui.main.ControlFragment$1
@@ -42,8 +53,28 @@ com/example/mdp_android_grp_31/ui/main/ControlFragment.java
  com.example.mdp_android_grp_31.ui.main.ControlFragment$7
  com.example.mdp_android_grp_31.ui.main.ControlFragment$8
  com.example.mdp_android_grp_31.ui.main.ControlFragment$9
+com/example/mdp_android_grp_31/ui/main/BluetoothChatFragment.java
+ com.example.mdp_android_grp_31.ui.main.BluetoothChatFragment
+ com.example.mdp_android_grp_31.ui.main.BluetoothChatFragment$1
+com/example/mdp_android_grp_31/ui/main/BluetoothConnectionService.java
+ com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService
+ com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$AcceptThread
+ com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectThread
+ com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectThread$1
+ com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectedThread
+com/example/mdp_android_grp_31/ui/main/DeviceListAdapter.java
+ com.example.mdp_android_grp_31.ui.main.DeviceListAdapter
+com/example/mdp_android_grp_31/MainActivity.java
+ com.example.mdp_android_grp_31.MainActivity
+ com.example.mdp_android_grp_31.MainActivity$1
+ com.example.mdp_android_grp_31.MainActivity$2
+ com.example.mdp_android_grp_31.MainActivity$3
+ com.example.mdp_android_grp_31.MainActivity$4
 com/example/mdp_android_grp_31/Constants.java
  com.example.mdp_android_grp_31.Constants
+com/example/mdp_android_grp_31/ui/main/PlaceholderFragment.java
+ com.example.mdp_android_grp_31.ui.main.PlaceholderFragment
+ com.example.mdp_android_grp_31.ui.main.PlaceholderFragment$1
 com/example/mdp_android_grp_31/ui/main/GridMap.java
  com.example.mdp_android_grp_31.ui.main.GridMap
  com.example.mdp_android_grp_31.ui.main.GridMap$1
@@ -130,34 +161,3 @@ com/example/mdp_android_grp_31/ui/main/GridMap.java
  com.example.mdp_android_grp_31.ui.main.GridMap$9
  com.example.mdp_android_grp_31.ui.main.GridMap$Cell
  com.example.mdp_android_grp_31.ui.main.GridMap$MyDragShadowBuilder
-com/example/mdp_android_grp_31/ui/main/DeviceListAdapter.java
- com.example.mdp_android_grp_31.ui.main.DeviceListAdapter
-com/example/mdp_android_grp_31/MainActivity.java
- com.example.mdp_android_grp_31.MainActivity
- com.example.mdp_android_grp_31.MainActivity$1
- com.example.mdp_android_grp_31.MainActivity$2
- com.example.mdp_android_grp_31.MainActivity$3
- com.example.mdp_android_grp_31.MainActivity$4
-com/example/mdp_android_grp_31/ui/main/BluetoothPopUp.java
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$1
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$10
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$11
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$12
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$2
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$3
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$4
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$5
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$6
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$7
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$8
- com.example.mdp_android_grp_31.ui.main.BluetoothPopUp$9
-com/example/mdp_android_grp_31/ui/main/BluetoothChatFragment.java
- com.example.mdp_android_grp_31.ui.main.BluetoothChatFragment
- com.example.mdp_android_grp_31.ui.main.BluetoothChatFragment$1
-com/example/mdp_android_grp_31/ui/main/BluetoothConnectionService.java
- com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService
- com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$AcceptThread
- com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectThread
- com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectThread$1
- com.example.mdp_android_grp_31.ui.main.BluetoothConnectionService$ConnectedThread
