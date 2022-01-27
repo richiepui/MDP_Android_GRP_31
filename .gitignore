@@ -89,3 +89,5 @@ lint/tmp/
 # Android Profiling
 *.hprof
 
+# Android Build
+/app/build/
