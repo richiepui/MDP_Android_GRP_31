@@ -1,6 +1,9 @@
 package com.example.mdp_android_grp_31.ui.main;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -14,10 +17,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.mdp_android_grp_31.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
@@ -57,6 +62,8 @@ public class BluetoothChatFragment extends Fragment {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
         }
         pageViewModel.setIndex(index);
+
+        LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
     }
 
     @Override
@@ -105,4 +112,18 @@ public class BluetoothChatFragment extends Fragment {
     public static TextView getMessageReceivedTextView() {
         return messageReceivedTextView;
     }
+
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("receivedMessage");
+            String sentText = "" + text.toString();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("message", sharedPreferences.getString("message", "") + sentText);
+            editor.commit();
+            messageReceivedTextView.setText(sharedPreferences.getString("message", ""));
+            typeBoxEditText.setText("");
+        }
+    };
 }

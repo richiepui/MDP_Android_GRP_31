@@ -168,7 +168,7 @@ public class BluetoothPopUp extends AppCompatActivity {
                         Log.d(TAG, "enableDisableBT: Making device discoverable for 600 seconds.");
 
                         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-                        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 5);
+                        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
                         startActivity(discoverableIntent);
 
                         compoundButton.setChecked(true);
@@ -238,7 +238,6 @@ public class BluetoothPopUp extends AppCompatActivity {
         });
     }
 
-
     public void Scanning(){
         Log.d(TAG, "toggleButton: Scanning for unpaired devices.");
         mNewBTDevices.clear();
@@ -248,7 +247,6 @@ public class BluetoothPopUp extends AppCompatActivity {
             }
             if (mBluetoothAdapter.isDiscovering()) {
                 mBluetoothAdapter.cancelDiscovery();
-                Log.d(TAG, "toggleButton: Cancelling Discovery.");
 
                 checkBTPermissions();
 
