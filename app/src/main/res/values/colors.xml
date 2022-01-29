@@ -10,4 +10,11 @@
     <color name="colorBlack">#FF000000</color>
     <color name="light_blue">#99E8F8</color>
     <color name="exploredColor">#FFF9FBE7</color>
+
+    <color name="niceGreen">#2AF598</color>
+    <color name="niceBlue">#66B9F9</color>
+
+
+    <color name="betterBlue">#4776E6</color>
+    <color name="betterPurple">#8E54E9</color>
 </resources>

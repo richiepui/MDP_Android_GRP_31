@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,12 +73,16 @@ public class BluetoothChatFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_comms, container, false);
 
-        send = (FloatingActionButton) root.findViewById(R.id.messageButton);
+        ImageButton send;
+        TextView messageReceivedTextView;
+        EditText  typeBoxEditText;
+
+        send = root.findViewById(R.id.messageButton);
 
         // Message Box
-        messageReceivedTextView = (TextView) root.findViewById(R.id.messageReceivedTextVie);
+        messageReceivedTextView = root.findViewById(R.id.messageReceivedTitleTextView);
         messageReceivedTextView.setMovementMethod(new ScrollingMovementMethod());
-        typeBoxEditText = (EditText) root.findViewById(R.id.typeBoxEditText);
+        typeBoxEditText = root.findViewById(R.id.typeBoxEditText);
 
         // get shared preferences
         sharedPreferences = getActivity().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
