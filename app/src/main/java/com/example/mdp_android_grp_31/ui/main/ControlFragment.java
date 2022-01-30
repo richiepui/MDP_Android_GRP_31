@@ -34,7 +34,7 @@ public class ControlFragment extends Fragment {
     SharedPreferences sharedPreferences;
 
     // Control Button
-    Button moveForwardImageBtn, turnRightImageBtn, moveBackImageBtn, turnLeftImageBtn;
+    ImageButton moveForwardImageBtn, turnRightImageBtn, moveBackImageBtn, turnLeftImageBtn;
     ImageButton exploreResetButton, fastestResetButton;
     private static long exploreTimer, fastestTimer;
     public static ToggleButton exploreButton, fastestButton;

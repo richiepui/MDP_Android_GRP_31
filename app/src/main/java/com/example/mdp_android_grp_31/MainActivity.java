@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ControlFragment controlFragment;
     static TextView xAxisTextView, yAxisTextView, directionAxisTextView;
     static TextView robotStatusTextView, bluetoothStatus, bluetoothDevice;
-    static Button upBtn, downBtn, leftBtn, rightBtn;
+    static ImageButton upBtn, downBtn, leftBtn, rightBtn;
 
     BluetoothDevice mBTDevice;
     private static UUID myUUID;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
 
         // Toolbar
-        Button bluetoothButton = (Button) findViewById(R.id.bluetoothButton);
+        ImageButton bluetoothButton = findViewById(R.id.bluetoothButton);
         bluetoothButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static TextView getRobotStatusTextView() {  return robotStatusTextView; }
 
-    public static Button getUpBtn() { return upBtn; }
-    public static Button getDownBtn() { return downBtn; }
-    public static Button getLeftBtn() { return leftBtn; }
-    public static Button getRightBtn() { return rightBtn; }
+    public static ImageButton getUpBtn() { return upBtn; }
+    public static ImageButton getDownBtn() { return downBtn; }
+    public static ImageButton getLeftBtn() { return leftBtn; }
+    public static ImageButton getRightBtn() { return rightBtn; }
 
     public static TextView getBluetoothStatus() { return bluetoothStatus; }
     public static TextView getConnectedDevice() { return bluetoothDevice; }

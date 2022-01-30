@@ -40,9 +40,10 @@ public class BluetoothChatFragment extends Fragment {
     // Shared Preferences
     SharedPreferences sharedPreferences;
 
-    FloatingActionButton send;
     private static TextView messageReceivedTextView;
     private EditText typeBoxEditText;
+
+    StringBuilder messages;
 
     public static BluetoothChatFragment newInstance(int index) {
         BluetoothChatFragment fragment = new BluetoothChatFragment();
@@ -51,8 +52,6 @@ public class BluetoothChatFragment extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,24 +64,23 @@ public class BluetoothChatFragment extends Fragment {
         pageViewModel.setIndex(index);
 
         LocalBroadcastManager.getInstance(this.getContext()).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
+        messages = new StringBuilder();
     }
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_comms, container, false);
+        View root = inflater.inflate(R.layout.activity_comms2, container, false);
+
 
         ImageButton send;
-        TextView messageReceivedTextView;
-        EditText  typeBoxEditText;
-
         send = root.findViewById(R.id.messageButton);
 
         // Message Box
-        messageReceivedTextView = root.findViewById(R.id.messageReceivedTitleTextView);
+        messageReceivedTextView = (TextView) root.findViewById(R.id.messageReceivedTitleTextView);
         messageReceivedTextView.setMovementMethod(new ScrollingMovementMethod());
-        typeBoxEditText = root.findViewById(R.id.typeBoxEditText);
+        typeBoxEditText = (EditText) root.findViewById(R.id.typeBoxEditText);
 
         // get shared preferences
         sharedPreferences = getActivity().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
@@ -122,13 +120,16 @@ public class BluetoothChatFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("receivedMessage");
-            String sentText = "" + text.toString();
+//            String sentText = "" + text.toString();
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("message", sharedPreferences.getString("message", "") + sentText);
-            editor.commit();
-            messageReceivedTextView.setText(sharedPreferences.getString("message", ""));
-            typeBoxEditText.setText("");
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putString("message", sharedPreferences.getString("message", "") + sentText);
+//            editor.commit();
+
+            /*sharedPreferences.getString("message", "")*/
+
+            messageReceivedTextView.append(text+"\n");
+            //typeBoxEditText.setText("");
         }
     };
 }
