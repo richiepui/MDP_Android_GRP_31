@@ -252,7 +252,8 @@
                         app:tabGravity="center"
                         app:tabMode="fixed"
                         app:tabIndicatorGravity="stretch"
-                        app:tabSelectedTextColor="@color/colorWhite"
+                        app:tabSelectedTextColor="@color/colorBlack"
+                        app:tabRippleColor="@null"
                         app:tabIndicatorColor="@null"
                         app:tabIndicatorAnimationMode="elastic"
                         app:tabIndicator="@drawable/tab_selected"/>
