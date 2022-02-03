@@ -323,7 +323,7 @@
                             android:layout_height="50dp"
                             android:layout_width="50dp"
                             android:layout_marginStart="15dp"
-                            android:background="@drawable/custom_button_circle" />
+                            android:background="@drawable/circular_button" />
 
                         <ImageButton
                             android:id="@+id/rightBtn"
