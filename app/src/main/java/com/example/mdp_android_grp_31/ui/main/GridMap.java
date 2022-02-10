@@ -89,9 +89,6 @@ public class GridMap extends View {
     private Bitmap arrowBitmap = BitmapFactory.decodeResource(getResources(),
             R.drawable.ic_arrow_error);
 
-    private Bitmap canvasBitMap = BitmapFactory.decodeResource(getResources(),
-            R.drawable.ferrari);
-
     private static final String TAG = "GridMap";
     private static final int COL = 20;
     private static final int ROW = 20;
