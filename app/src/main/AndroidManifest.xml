@@ -44,8 +44,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.mdp_android_grp_31.ui.main.BluetoothPopUp"></activity>
+        <activity android:name="com.example.mdp_android_grp_31.ui.main.BluetoothPopUp"/>
         <activity android:name="com.example.mdp_android_grp_31.ui.main.MapInformation" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
