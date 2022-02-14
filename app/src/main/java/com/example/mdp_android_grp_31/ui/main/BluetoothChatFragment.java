@@ -120,16 +120,7 @@ public class BluetoothChatFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("receivedMessage");
-//            String sentText = "" + text.toString();
-
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            editor.putString("message", sharedPreferences.getString("message", "") + sentText);
-//            editor.commit();
-
-            /*sharedPreferences.getString("message", "")*/
-
             messageReceivedTextView.append(text+"\n");
-            //typeBoxEditText.setText("");
         }
     };
 }

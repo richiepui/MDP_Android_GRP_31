@@ -137,7 +137,7 @@ public class ControlFragment extends Fragment {
                         updateStatus("moving forward");
                     else
                         updateStatus("Unable to move forward");
-                    MainActivity.printMessage("STM|b \n");
+                    MainActivity.printMessage("STM|Forward");
                 }
                 else
                     updateStatus("Please press 'STARTING POINT'");
@@ -154,7 +154,7 @@ public class ControlFragment extends Fragment {
                 else if (gridMap.getCanDrawRobot() && !gridMap.getAutoUpdate()) {
                     gridMap.moveRobot("right");
                     MainActivity.refreshLabel();
-                    MainActivity.printMessage("STM|j  / \n");
+                    MainActivity.printMessage("STM|Right");
                 }
                 else
                     updateStatus("Please press 'STARTING POINT'");
@@ -175,7 +175,7 @@ public class ControlFragment extends Fragment {
                         updateStatus("moving backward");
                     else
                         updateStatus("Unable to move backward");
-                    MainActivity.printMessage("STM|f \n");
+                    MainActivity.printMessage("STM|Back");
                 }
                 else
                     updateStatus("Please press 'STARTING POINT'");
@@ -193,7 +193,7 @@ public class ControlFragment extends Fragment {
                     gridMap.moveRobot("left");
                     MainActivity.refreshLabel();
                     updateStatus("turning left");
-                    MainActivity.printMessage("STM|i \n");
+                    MainActivity.printMessage("STM|Left");
                 }
                 else
                     updateStatus("Please press 'STARTING POINT'");
@@ -290,5 +290,9 @@ public class ControlFragment extends Fragment {
         Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP,0, 0);
         toast.show();
+    }
+
+    private void println(){
+        System.out.println("I am here");
     }
 }

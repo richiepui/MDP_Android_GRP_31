@@ -2306,15 +2306,23 @@ public class GridMap extends View {
     }
 
     // week 8 req to send algo obstacle info
+    //Code edited to remove 0.5
     public String getObstacles() {
         String msg = "ALG|";
 
         for (int i = 0; i < obstacleCoord.size(); i++) {
             Logd("i = " + Integer.toString(i));
-            msg +=  (Float.toString((float) (obstacleCoord.get(i)[0] + 0.5)) + ","
-                    + Float.toString((float) (obstacleCoord.get(i)[1] + 0.5)) + ","
-                    + imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0)
-                    + ";");
+            if (i==obstacleCoord.size()-1) {
+                msg += (Float.toString((float) (obstacleCoord.get(i)[0])) + ","
+                        + Float.toString((float) (obstacleCoord.get(i)[1])) + ","
+                        + imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0));
+            }
+            else{
+                msg += (Float.toString((float) (obstacleCoord.get(i)[0])) + ","
+                        + Float.toString((float) (obstacleCoord.get(i)[1])) + ","
+                        + imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0)
+                        + "|");
+            }
         }
         msg += "\n";
         return msg;
