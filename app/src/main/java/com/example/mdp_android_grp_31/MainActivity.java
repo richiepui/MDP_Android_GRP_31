@@ -162,6 +162,23 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
     }
 
+    // Send Coordinates to ALG
+    public static void printCoords(String message){
+        showLog("Displaying Coords untranslated and translated");
+        String[] strArr = message.split("-",2);
+
+        if (BluetoothConnectionService.BluetoothConnectionStatus == true){
+            byte[] bytes = strArr[1].getBytes(Charset.defaultCharset());
+            BluetoothConnectionService.write(bytes);
+        }
+
+        refreshMessageReceivedNS("Untranslated Coordinates: " + strArr[0] + "\n");
+        refreshMessageReceivedNS("Translated Coordinates: "+strArr[1]);
+        showLog("Exiting printCoords");
+
+
+    }
+
     // Send message to bluetooth
     public static void printMessage(String message) {
         showLog("Entering printMessage");
@@ -172,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
             BluetoothConnectionService.write(bytes);
         }
         showLog(message);
-        editor.putString("message",
-            BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
-        editor.commit();
-        refreshMessageReceived();
+//        editor.putString("message",
+//            BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
+//        editor.commit();
+        refreshMessageReceivedNS(message);
         showLog("Exiting printMessage");
     }
 
@@ -206,6 +223,10 @@ public class MainActivity extends AppCompatActivity {
             BluetoothConnectionService.write(bytes);
         }
         showLog("Exiting printMessage");
+    }
+
+    public static void refreshMessageReceivedNS(String message){
+        BluetoothChatFragment.getMessageReceivedTextView().append(message);
     }
 
     public static void refreshMessageReceived() {

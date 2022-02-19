@@ -214,7 +214,7 @@ public class ControlFragment extends Fragment {
                 }
                 else if (exploreToggleBtn.getText().equals("STOP")) {
                     String msg = gridMap.getObstacles();
-                    MainActivity.printMessage(msg);
+                    MainActivity.printCoords(msg);
                     MainActivity.stopTimerFlag = false;
                     showToast("Auto Movement/ImageRecog timer start!");
                     robotStatusTextView.setText("Auto Movement Started");

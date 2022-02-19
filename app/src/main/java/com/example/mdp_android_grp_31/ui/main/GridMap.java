@@ -332,6 +332,11 @@ public class GridMap extends View {
     }
 
     private void drawRobot(Canvas canvas, int[] curCoord) {
+
+        float xCoord, yCoord;
+        BitmapFactory.Options op = new BitmapFactory.Options();
+        Bitmap bm, mapscalable;
+
         Logd("Entering drawRobot");
         Logd("curCoord[0] = " + curCoord[0] + ", curCoord[1] = " + curCoord[1]);
         int androidRowCoord = curCoord[1];
@@ -365,70 +370,43 @@ public class GridMap extends View {
                 );
             }
 
+
             // use cells[initialCol][20 - initialRow] as ref
             switch (this.getRobotDirection()) {
                 case "up":
-                    canvas.drawLine(
-                    cells[curCoord[0] - 1][20 - androidRowCoord].startX,
-                    cells[curCoord[0] - 1][20 - androidRowCoord].endY,
-                    cells[curCoord[0] - 1][20 - androidRowCoord].endX,
-                    cells[curCoord[0]][20 - androidRowCoord - 1].startY,
-                    blackPaint );
-
-                    canvas.drawLine(
-                    cells[curCoord[0]][21 - androidRowCoord].endX,
-                    cells[curCoord[0]][21 - androidRowCoord - 1].endY,
-                    cells[curCoord[0] - 1][21 - androidRowCoord].endX,
-                    cells[curCoord[0]][21 - androidRowCoord - 2].startY,
-                    blackPaint );
+                    //This makes the coordinates adjustable instead of static
+                    op.inMutable = true;
+                    bm =BitmapFactory.decodeResource(getResources(),R.drawable.car_face_up, op);
+                    mapscalable = Bitmap.createScaledBitmap(bm, 51,51, true);
+                    xCoord =cells[curCoord[0] - 1][20 - androidRowCoord].startX;
+                    yCoord = cells[curCoord[0]][20 - androidRowCoord - 1].startY;
+                    canvas.drawBitmap(mapscalable, xCoord, yCoord, null);
                     break;
                 case "down":
-                    canvas.drawLine(
-                        cells[curCoord[0]][21 - androidRowCoord].endX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startY,
-                        cells[curCoord[0] - 1][21 - androidRowCoord].endX,
-                        cells[curCoord[0]][21 - androidRowCoord].startY,
-                        blackPaint
-                    );
-                    canvas.drawLine(
-                        cells[curCoord[0] - 2][21 - androidRowCoord].endX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startY,
-                        cells[curCoord[0] - 1][21 - androidRowCoord].endX,
-                        cells[curCoord[0]][21 - androidRowCoord].startY,
-                        blackPaint
-                    );
+                    op.inMutable = true;
+                    bm =BitmapFactory.decodeResource(getResources(),R.drawable.car_face_down, op);
+                    mapscalable = Bitmap.createScaledBitmap(bm, 51,51, true);
+                    xCoord =cells[curCoord[0] - 1][20 - androidRowCoord].startX;
+                    yCoord = cells[curCoord[0]][20 - androidRowCoord - 1].startY;
+                    canvas.drawBitmap(mapscalable, xCoord, yCoord, null);
                     break;
                 case "right":
-                    canvas.drawLine(
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startY,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].endX,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].startY,
-                        blackPaint
-                    );
-                    canvas.drawLine(
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord].startY,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].endX,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].startY,
-                        blackPaint
-                    );
+                    op.inMutable = true;
+                    bm =BitmapFactory.decodeResource(getResources(),R.drawable.car_face_right, op);
+                    mapscalable = Bitmap.createScaledBitmap(bm, 51,51, true);
+                    xCoord =cells[curCoord[0] - 1][20 - androidRowCoord].startX;
+                    yCoord = cells[curCoord[0]][20 - androidRowCoord - 1].startY;
+                    canvas.drawBitmap(mapscalable, xCoord, yCoord, null);
+
                     break;
                 case "left":
-                    canvas.drawLine(
-                        cells[curCoord[0]][21 - androidRowCoord - 1].endX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 1].endY,
-                        cells[curCoord[0] - 2][21 - androidRowCoord].endX,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].startY,
-                        blackPaint
-                    );
-                    canvas.drawLine(
-                        cells[curCoord[0]][21 - androidRowCoord - 1].endX,
-                        cells[curCoord[0] - 1][21 - androidRowCoord - 2].startY,
-                        cells[curCoord[0] - 2][21 - androidRowCoord].endX,
-                        cells[curCoord[0]][21 - androidRowCoord - 1].startY,
-                        blackPaint
-                    );
+                    op.inMutable = true;
+                    bm =BitmapFactory.decodeResource(getResources(),R.drawable.car_face_left, op);
+                    mapscalable = Bitmap.createScaledBitmap(bm, 51,51, true);
+                    xCoord =cells[curCoord[0] - 1][20 - androidRowCoord].startX;
+                    yCoord = cells[curCoord[0]][20 - androidRowCoord - 1].startY;
+                    canvas.drawBitmap(mapscalable, xCoord, yCoord, null);
+
                     break;
                 default:
                     Toast.makeText(
@@ -852,8 +830,7 @@ public class GridMap extends View {
 
                     setObstacleCoord(endColumn, endRow);
                     for (int i = 0; i < obstacleCoord.size(); i++) {
-                        if (Arrays.equals(obstacleCoord.get(i),
-                                new int[]{initialColumn - 1, initialRow - 1}))
+                        if (Arrays.equals(obstacleCoord.get(i), new int[]{initialColumn - 1, initialRow - 1}))
                             obstacleCoord.remove(i);
                     }
                     cells[initialColumn][20 - initialRow].setType("unexplored");
@@ -2305,25 +2282,97 @@ public class GridMap extends View {
         Logd("Exit performAlgoTurning");
     }
 
+    //Week 8 Translation Mapping
+    public ArrayList<int[]> translateCoord(ArrayList<int[]> ogCoords, int protocol){
+        //Implementation of Protocol Number to decide the type of translation
+        //Sender to receiver
+        //Receiver to sender
+        if (protocol == 0){
+            for (int i = 0; i< ogCoords.size(); i++){
+                ogCoords.get(i)[1] = Math.abs(ogCoords.get(i)[1] - 19);
+            }
+        }
+        return ogCoords;
+    }
+
+
+
     // week 8 req to send algo obstacle info
     //Code edited to remove 0.5
     public String getObstacles() {
+        int count = 1;
         String msg = "ALG|";
 
+        ArrayList<Character> directionArr = new ArrayList<>();
+        for (int i = 0; i < imageBearings.size();i++){
+            System.out.print("row"+ count+" ");
+            for(int j = 0 ; j< imageBearings.size(); j++){
+                if (imageBearings.get(i)[j].equals(""))
+                    System.out.print("X|");
+                else{
+                    System.out.print(imageBearings.get(i)[j]+"|");
+                }
+            }
+            System.out.println("\n");
+            count++;
+        }
+
+        // public void setObstacleCoord(int col, int row) {
         for (int i = 0; i < obstacleCoord.size(); i++) {
-            Logd("i = " + Integer.toString(i));
             if (i==obstacleCoord.size()-1) {
-                msg += (Float.toString((float) (obstacleCoord.get(i)[0])) + ","
-                        + Float.toString((float) (obstacleCoord.get(i)[1])) + ","
+                System.out.println("index: " + i);
+                System.out.println(obstacleCoord.get(i)[1]);
+                System.out.println(obstacleCoord.get(i)[0]);
+                directionArr.add(imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0));
+                msg += ((obstacleCoord.get(i)[0]) + ","
+                        + (obstacleCoord.get(i)[1]) + ","
                         + imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0));
+
             }
             else{
-                msg += (Float.toString((float) (obstacleCoord.get(i)[0])) + ","
-                        + Float.toString((float) (obstacleCoord.get(i)[1])) + ","
+                System.out.println("index: " + i);
+                System.out.println(obstacleCoord.get(i)[1]);
+                System.out.println(obstacleCoord.get(i)[0]);
+                directionArr.add(imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0));
+                msg += ((obstacleCoord.get(i)[0]) + ","
+                        + (obstacleCoord.get(i)[1]) + ","
                         + imageBearings.get(obstacleCoord.get(i)[1])[obstacleCoord.get(i)[0]].charAt(0)
                         + "|");
             }
         }
+
+        //Translation Message to Algo
+        msg+="-";
+        msg+="ALG|";
+
+        ArrayList<int[]> coordlist = new ArrayList<>();
+
+        for (int i = 0; i<obstacleCoord.size(); i++){
+            int col = obstacleCoord.get(i)[0];
+            int row = obstacleCoord.get(i)[1];
+            int[] newCoord = new int[]{col, row};
+            coordlist.add(newCoord);
+        }
+
+        ArrayList<int[]>translateCoords = translateCoord(coordlist,0);
+
+
+        for (int i = 0; i < translateCoords.size(); i++){
+            if (i ==  translateCoords.size()-1){
+                msg += ((translateCoords.get(i)[0]) + ","
+                        + (translateCoords.get(i)[1]) + ","
+                        + directionArr.get(i));
+
+
+            }
+            else{
+                msg += ((translateCoords.get(i)[0]) + ","
+                        + (translateCoords.get(i)[1]) + ","
+                        + directionArr.get(i)
+                        + "|");
+            }
+        }
+
         msg += "\n";
         return msg;
     }

@@ -94,7 +94,8 @@ public class BluetoothChatFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("message", sharedPreferences.getString("message", "") + '\n' + sentText);
                 editor.commit();
-                messageReceivedTextView.setText(sharedPreferences.getString("message", ""));
+                //messageReceivedTextView.append(sharedPreferences.getString("message", ""));
+                messageReceivedTextView.append(sentText+"\n");
                 typeBoxEditText.setText("");
 
                 if (BluetoothConnectionService.BluetoothConnectionStatus == true) {
@@ -120,7 +121,8 @@ public class BluetoothChatFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("receivedMessage");
-            messageReceivedTextView.append(text+"\n");
+            Log.d("QQQQ", text);
+            messageReceivedTextView.append(text+"\n"+"\n");
         }
     };
 }
