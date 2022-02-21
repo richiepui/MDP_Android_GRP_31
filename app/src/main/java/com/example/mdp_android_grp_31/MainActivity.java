@@ -306,9 +306,18 @@ public class MainActivity extends AppCompatActivity {
             String message = intent.getStringExtra("receivedMessage");
             showLog("receivedMessage: message --- " + message);
 
-            if(message.contains(",")) {
-                String[] cmd = message.split(",");
+            if(message.contains("|")) {
+                String[] cmd = message.split("\\|");
+                if (cmd[0].equals("AND_PATH")) {
+                    for (int i = 1; i < cmd.length; i++) {
+                        String[] coord = cmd[i].split(",");
+                        gridMap.performAlgoCommand(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]), coord[2]);
+                    }
+                }
+            }
 
+            else if(message.contains(",")) {
+                String[] cmd = message.split(",");
                 // check if string is cmd sent by ALG/RPI to get obstacle/image id
                 if (cmd[0].equals("ALG") || cmd[0].equals("RPI")) {
                     showLog("cmd[0] is ALG or RPI");
@@ -327,7 +336,8 @@ public class MainActivity extends AppCompatActivity {
                         obstacleID = "";
                         imageID = "";
                     }
-                } else {
+                }
+                else {
 
                     // alg sends in cm and float e.g. 100,100,N
                     float x = Integer.parseInt(cmd[0]);
