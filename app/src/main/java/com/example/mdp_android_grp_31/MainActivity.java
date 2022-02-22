@@ -309,9 +309,23 @@ public class MainActivity extends AppCompatActivity {
             if(message.contains("|")) {
                 String[] cmd = message.split("\\|");
                 if (cmd[0].equals("AND_PATH")) {
+                    int previous_x = 2;
+                    int previous_y = 2;
                     for (int i = 1; i < cmd.length; i++) {
                         String[] coord = cmd[i].split(",");
-                        gridMap.performAlgoCommand(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]), coord[2]);
+                        int current_x = Integer.parseInt(coord[0]);
+                        int current_y = Integer.parseInt(coord[1]);
+                        if(current_x == previous_x || current_y == previous_y){
+                            gridMap.performAlgoCommand(current_x, current_y, coord[2]);
+                        }
+                        else{
+                            int in_between_x = (current_x + previous_x) /2;
+                            int in_between_y = (current_y + previous_y) /2;
+                            gridMap.performAlgoCommand(in_between_x, in_between_y, coord[2]);
+                            gridMap.performAlgoCommand(current_x, current_y, coord[2]);
+                        }
+                        previous_x = current_x;
+                        previous_y = current_y;
                     }
                 }
             }
