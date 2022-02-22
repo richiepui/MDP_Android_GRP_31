@@ -343,61 +343,10 @@ public class MainActivity extends AppCompatActivity {
                         previous_y = current_y;
                 }
             }
-
-            else if(message.contains(",")) {
-                String[] cmd = message.split(",");
-                // check if string is cmd sent by ALG/RPI to get obstacle/image id
-                if (cmd[0].equals("ALG") || cmd[0].equals("RPI")) {
-                    showLog("cmd[0] is ALG or RPI");
-                    if(obstacleID.equals(""))
-                        obstacleID = cmd[0].equals("ALG") ? cmd[1] : "";
-                    if(imageID.equals(""))
-                        imageID = cmd[0].equals("RPI") ? cmd[1] : "";
-
-                    showLog("obstacleID = " + obstacleID);
-                    showLog("imageID = " + imageID);
-
-                    // call update fn only when both IDs are obtained
-                    if (!(obstacleID.equals("") || imageID.equals(""))) {
-                        showLog("imageID and obstacleID not empty");
-                        gridMap.updateIDFromRpi(obstacleID, imageID);
-                        obstacleID = "";
-                        imageID = "";
-                    }
-                }
-                else {
-
-                    // alg sends in cm and float e.g. 100,100,N
-                    float x = Integer.parseInt(cmd[0]);
-                    float y = Integer.parseInt(cmd[1]);
-
-                    // process received figures to pass into our fn
-                    int a = Math.round(x);
-                    int b = Math.round(y);
-                    a = (a / 10) + 1;
-                    b = (b / 10) + 1;
-
-                    String direction = cmd[2];
-
-                    // allow robot to show up on grid if its on the very boundary
-                    if (a == 1) a++;
-                    if (b == 20) b--;
-
-                    if (cmd.length == 4){
-                        String command = cmd[3];
-
-                        // if move forward, reverse, turn on the spot left/right
-                        if (command.equals("f") || command.equals("r") || command.equals("sr")
-                            || command.equals("sl")) {
-                            showLog("forward, reverse or turn on spot");
-                            gridMap.performAlgoCommand(a, b, direction);
-                        }
-                        // for all other turning cmds
-                        else {
-                            gridMap.performAlgoTurning(a, b, direction, command);
-                        }
-                    }
-                }
+            //image format from RPI is "IMG-Obstacle ID-ImageID" eg IMG-3-7
+            else if(message.contains("IMG")) {
+                String[] cmd = message.split("-");
+                gridMap.updateIDFromRpi(cmd[1], cmd[2]);
             }
             else if (message.equals("END")) {
                 // if wk 8 btn is checked, means running wk 8 challenge and likewise for wk 9
