@@ -305,28 +305,42 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra("receivedMessage");
             showLog("receivedMessage: message --- " + message);
-
             if(message.contains("|")) {
                 String[] cmd = message.split("\\|");
-                if (cmd[0].equals("AND_PATH")) {
                     int previous_x = 2;
                     int previous_y = 2;
                     for (int i = 1; i < cmd.length; i++) {
                         String[] coord = cmd[i].split(",");
-                        int current_x = Integer.parseInt(coord[0]);
-                        int current_y = Integer.parseInt(coord[1]);
+                        int current_x = Integer.parseInt(coord[0]) + 1;
+                        int current_y = 20 - Integer.parseInt(coord[1]);
+                        String direction = "";
+                        switch(coord[2]){
+                            case "0":
+                                direction = "E";
+                                break;
+                            case "90":
+                                direction = "N";
+                                break;
+                            case "180":
+                                direction = "W";
+                                break;
+                            case "270":
+                                direction = "S";
+                                break;
+                            default:
+                                direction = "";
+                        }
                         if(current_x == previous_x || current_y == previous_y){
-                            gridMap.performAlgoCommand(current_x, current_y, coord[2]);
+                            gridMap.performAlgoCommand(current_x, current_y, direction);
                         }
                         else{
                             int in_between_x = (current_x + previous_x) /2;
                             int in_between_y = (current_y + previous_y) /2;
-                            gridMap.performAlgoCommand(in_between_x, in_between_y, coord[2]);
-                            gridMap.performAlgoCommand(current_x, current_y, coord[2]);
+                            gridMap.performAlgoCommand(in_between_x, in_between_y, direction);
+                            gridMap.performAlgoCommand(current_x, current_y, direction);
                         }
                         previous_x = current_x;
                         previous_y = current_y;
-                    }
                 }
             }
 
