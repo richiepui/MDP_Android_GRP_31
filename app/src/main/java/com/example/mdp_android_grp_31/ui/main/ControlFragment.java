@@ -2,6 +2,7 @@ package com.example.mdp_android_grp_31.ui.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,10 +15,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 
 import com.example.mdp_android_grp_31.MainActivity;
 import com.example.mdp_android_grp_31.R;
@@ -43,6 +49,7 @@ public class ControlFragment extends Fragment {
 
     // Timer
     public static Handler timerHandler = new Handler();
+
 
     public Runnable timerRunnableExplore = new Runnable() {
         @Override
@@ -292,7 +299,8 @@ public class ControlFragment extends Fragment {
         toast.show();
     }
 
-    private void println(){
-        System.out.println("I am here");
+    private static void schedulingTimer(){
+
     }
+
 }

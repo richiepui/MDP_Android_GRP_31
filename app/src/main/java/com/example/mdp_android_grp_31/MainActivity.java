@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +37,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    int globalPrevious_x;
+    int globalPrevious_y;
+    int globalCurrent_x;
+    int globalCurrent_y;
+    String globalDirection = "";
+
 
     // Declaration Variables
     private static SharedPreferences sharedPreferences;
@@ -61,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main Activity";
     public static boolean stopTimerFlag = false;
     public static boolean stopWk9TimerFlag = false;
+
+    final Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
         myDialog.setMessage("Waiting for other device to reconnect...");
         myDialog.setCancelable(false);
         myDialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE,
-            "Cancel",
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                DialogInterface.BUTTON_NEGATIVE,
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
                 }
-            }
         );
     }
 
@@ -216,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         editor.putString("message",
-            BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
+                BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
         editor.commit();
         if (BluetoothConnectionService.BluetoothConnectionStatus == true) {
             byte[] bytes = message.getBytes(Charset.defaultCharset());
@@ -231,8 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static void refreshMessageReceived() {
         BluetoothChatFragment
-            .getMessageReceivedTextView()
-            .setText(sharedPreferences.getString("message", ""));
+                .getMessageReceivedTextView()
+                .setText(sharedPreferences.getString("message", ""));
     }
 
     public void refreshDirection(String direction) {
@@ -251,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         showLog("Entering receiveMessage");
         sharedPreferences();
         editor.putString("message",
-            sharedPreferences.getString("message", "") + "\n" + message);
+                sharedPreferences.getString("message", "") + "\n" + message);
         editor.commit();
         showLog("Exiting receiveMessage");
     }
@@ -307,41 +320,77 @@ public class MainActivity extends AppCompatActivity {
             showLog("receivedMessage: message --- " + message);
             if(message.contains("|")) {
                 String[] cmd = message.split("\\|");
-                    int previous_x = 2;
-                    int previous_y = 2;
-                    for (int i = 1; i < cmd.length; i++) {
-                        String[] coord = cmd[i].split(",");
-                        int current_x = Integer.parseInt(coord[0]) + 1;
-                        int current_y = 20 - Integer.parseInt(coord[1]);
-                        String direction = "";
-                        switch(coord[2]){
-                            case "0":
-                                direction = "E";
-                                break;
-                            case "90":
-                                direction = "N";
-                                break;
-                            case "180":
-                                direction = "W";
-                                break;
-                            case "270":
-                                direction = "S";
-                                break;
-                            default:
-                                direction = "";
-                        }
-                        if(current_x == previous_x || current_y == previous_y){
-                            gridMap.performAlgoCommand(current_x, current_y, direction);
-                        }
-                        else{
-                            int in_between_x = (current_x + previous_x) /2;
-                            int in_between_y = (current_y + previous_y) /2;
-                            gridMap.performAlgoCommand(in_between_x, in_between_y, direction);
-                            gridMap.performAlgoCommand(current_x, current_y, direction);
-                        }
-                        previous_x = current_x;
-                        previous_y = current_y;
+                globalPrevious_x = 2;
+                globalPrevious_y = 2;
+                //ArrayList<ArrayList<String>> mapCoordArrayList = new ArrayList<ArrayList<String>>();
+                ArrayList<String> singleMapCoordArrayList = new ArrayList<String>();
+                for (int i = 1; i < cmd.length; i++) {
+                    String[] coord = cmd[i].split(",");
+                    globalCurrent_x = Integer.parseInt(coord[0]) + 1;
+                    globalCurrent_y = 20 - Integer.parseInt(coord[1]);
+                    globalDirection = "";
+                    switch(coord[2]){
+                        case "0":
+                            globalDirection = "E";
+                            break;
+                        case "90":
+                            globalDirection = "N";
+                            break;
+                        case "180":
+                            globalDirection = "W";
+                            break;
+                        case "270":
+                            globalDirection = "S";
+                            break;
+                        default:
+                            globalDirection = "";
+                    }
+
+                    if(globalCurrent_x == globalPrevious_x || globalCurrent_y == globalPrevious_y){
+                        //gridMap.performAlgoCommand(globalCurrent_x, globalCurrent_y, globalDirection);
+                        String mapString = globalCurrent_x+","+globalCurrent_y+","+globalDirection;
+                        singleMapCoordArrayList.add(mapString);
+                    }
+                    else{
+                        int in_between_x = (globalCurrent_x + globalPrevious_x) /2;
+                        int in_between_y = (globalCurrent_y + globalCurrent_y) /2;
+                        String mapString = in_between_x+","+in_between_y+","+globalDirection;
+                        singleMapCoordArrayList.add(mapString);
+                        //gridMap.performAlgoCommand(in_between_x, in_between_y, globalDirection);
+                        String mapString1 = globalCurrent_x+","+globalCurrent_y+","+globalDirection;
+                        singleMapCoordArrayList.add(mapString1);
+                        //gridMap.performAlgoCommand(globalCurrent_x, globalCurrent_y, globalDirection);
+                    }
+                    globalPrevious_x = globalCurrent_x;
+                    globalPrevious_y = globalCurrent_y;
                 }
+                int time =0;
+                for (int i =0; i<singleMapCoordArrayList.size(); i++) {
+                    time+=500;
+                    String[] singleCord = singleMapCoordArrayList.get(i).split(",");
+                    int coordx = Integer.parseInt(singleCord[0]);
+                    int coordy = Integer.parseInt(singleCord[1]);
+                    String dir = singleCord[2];
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            gridMap.performAlgoCommand(coordx, coordy, dir);
+                        }
+                    },time);
+                }
+
+
+//                int time = 0;
+//                for (int i =0; i<singleMapCoordArrayList.size(); i++){
+//                    time+=1000;
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                        }
+//                    },time);
+//
+//                }
             }
             //image format from RPI is "IMG-Obstacle ID-ImageID" eg IMG-3-7
             else if(message.contains("IMG")) {
@@ -423,4 +472,3 @@ public class MainActivity extends AppCompatActivity {
         showLog("Exiting onSaveInstanceState");
     }
 }
-
