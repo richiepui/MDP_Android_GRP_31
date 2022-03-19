@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
@@ -28,16 +29,6 @@
                     android:layout_marginTop="5dp"
                     android:textOff="SET STARTPOINT"
                     android:textOn="CANCEL" />
-
-                <ToggleButton
-                    android:id="@+id/waypointToggleBtn"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="10dp"
-                    android:textOff="SET WAYPOINT"
-                    android:textOn="CANCEL"
-                    android:visibility="invisible" />
 
                 <LinearLayout
                     android:layout_width="140dp"
@@ -71,19 +62,21 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:text="Reset Map" />
-
-                <Switch
-                    android:id="@+id/autoManualSwitch"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/saveBtn"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="10dp"
-                    android:text="MANUAL"
-                    android:textFontWeight="500"
-                    android:textOff="@string/manual"
-                    android:textOn="@string/auto"
-                    android:textSize="28px"
-                    android:visibility="invisible" />
+                    android:layout_marginTop="15dp"
+                    android:text="Save Map Obstacles" />
+                <Button
+                    android:id="@+id/loadBtn"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Load Saved Obstacles" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -179,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="13dp"
-                android:text="Preload Obstacles" />
+                android:text="Preload Default Obstacles" />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.example.mdp_android_grp_31.ui.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,8 @@ import com.example.mdp_android_grp_31.R;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 public class MapTabFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -32,7 +36,10 @@ public class MapTabFragment extends Fragment {
 
     private PageViewModel pageViewModel;
 
-    Button resetMapBtn, updateButton;
+    SharedPreferences mapPref;
+    private static SharedPreferences.Editor editor;
+
+    Button resetMapBtn, updateButton, saveMapObstacle, loadMapObstacle;
     ImageButton directionChangeImageBtn, exploredImageBtn, obstacleImageBtn, clearImageBtn;
     ToggleButton setStartPointToggleBtn, setWaypointToggleBtn;
     Switch manualAutoToggleBtn;
@@ -84,8 +91,9 @@ public class MapTabFragment extends Fragment {
         exploredImageBtn = root.findViewById(R.id.exploredImageBtn);
         obstacleImageBtn = root.findViewById(R.id.addObstacleBtn);
         clearImageBtn = root.findViewById(R.id.clearImageBtn);
-        manualAutoToggleBtn = root.findViewById(R.id.autoManualSwitch);
         updateButton = root.findViewById(R.id.updateMapBtn);
+        saveMapObstacle = root.findViewById(R.id.saveBtn);
+        loadMapObstacle = root.findViewById(R.id.loadBtn);
 
         dragSwitch = root.findViewById(R.id.dragSwitch);
         changeObstacleSwitch = root.findViewById(R.id.changeObstacleSwitch);
@@ -184,22 +192,55 @@ public class MapTabFragment extends Fragment {
             }
         });
 
-        setWaypointToggleBtn.setOnClickListener(new View.OnClickListener() {
+        saveMapObstacle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLog("Clicked setWaypointToggleBtn");
-                if (setWaypointToggleBtn.getText().equals("WAYPOINT"))
-                    showToast("Cancelled selecting waypoint");
-                else if (setWaypointToggleBtn.getText().equals("CANCEL")) {
-                    showToast("Please select waypoint");
-                    gridMap.setWaypointStatus(true);
-                    gridMap.toggleCheckedBtn("setWaypointToggleBtn");
+                String getObsPos = "";
+                mapPref = getContext().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
+                editor = mapPref.edit();
+                if(!mapPref.getString("maps", "").equals("")){
+                    editor.putString("maps", "");
+                    editor.commit();
                 }
-                else
-                    showToast("Please select manual mode");
-                showLog("Exiting setWaypointToggleBtn");
+                getObsPos = GridMap.saveObstacleList();
+                editor.putString("maps",getObsPos);
+                editor.commit();
             }
         });
+
+        loadMapObstacle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapPref = getContext().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
+                String obsPos = mapPref.getString("maps","");
+                String[] obstaclePosition = obsPos.split("\\|");
+                for (String s : obstaclePosition) {
+                    String[] coords = s.split(",");
+                    gridMap.setObstacleCoord(Integer.parseInt(coords[0])+1, Integer.parseInt(coords[1])+1);
+                    String direction = "";
+                    switch (coords[2]) {
+                        case "N":
+                            direction = "North";
+                            break;
+                        case "E":
+                            direction = "East";
+                            break;
+                        case "W":
+                            direction = "West";
+                            break;
+                        case "S":
+                            direction = "South";
+                            break;
+                        default:
+                            direction = "";
+                    }
+                    gridMap.imageBearings.get(Integer.parseInt(coords[1]))[Integer.parseInt(coords[0])] = direction;
+                }
+                gridMap.invalidate();
+                showLog("Exiting Load Button");
+            }
+        });
+
 
         directionChangeImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,40 +274,6 @@ public class MapTabFragment extends Fragment {
                 dragSwitch.setChecked(false);
                 showLog("obstacle status = " + gridMap.getSetObstacleStatus());
                 showLog("Exiting obstacleImageBtn");
-            }
-        });
-
-        manualAutoToggleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLog("Clicked manualAutoToggleBtn");
-                if (manualAutoToggleBtn.getText().equals("MANUAL")) {
-                    try {
-                        gridMap.setAutoUpdate(true);
-                        autoUpdate = true;
-                        gridMap.toggleCheckedBtn("None");
-                        updateButton.setClickable(false);
-                        updateButton.setTextColor(Color.GRAY);
-                        manualAutoToggleBtn.setText("AUTO");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    showToast("AUTO mode");
-                }
-                else if (manualAutoToggleBtn.getText().equals("AUTO")) {
-                    try {
-                        gridMap.setAutoUpdate(false);
-                        autoUpdate = false;
-                        gridMap.toggleCheckedBtn("None");
-                        updateButton.setClickable(true);
-                        updateButton.setTextColor(Color.BLACK);
-                        manualAutoToggleBtn.setText("MANUAL");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    showToast("MANUAL mode");
-                }
-                showLog("Exiting manualAutoToggleBtn");
             }
         });
 

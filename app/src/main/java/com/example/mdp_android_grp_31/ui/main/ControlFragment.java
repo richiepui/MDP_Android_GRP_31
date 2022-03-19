@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +45,7 @@ public class ControlFragment extends Fragment {
     ImageButton exploreResetButton, fastestResetButton;
     private static long exploreTimer, fastestTimer;
     public static ToggleButton exploreButton, fastestButton;
-    TextView exploreTimeTextView, fastestTimeTextView, robotStatusTextView;
+    public static TextView exploreTimeTextView, fastestTimeTextView, robotStatusTextView;
     private static GridMap gridMap;
 
     // Timer
@@ -67,7 +68,7 @@ public class ControlFragment extends Fragment {
         }
     };
 
-    public Runnable timerRunnableFastest = new Runnable() {
+    public static Runnable timerRunnableFastest = new Runnable() {
         @Override
         public void run() {
             long millisFastest = System.currentTimeMillis() - fastestTimer;
@@ -162,6 +163,7 @@ public class ControlFragment extends Fragment {
                     gridMap.moveRobot("right");
                     MainActivity.refreshLabel();
                     MainActivity.printMessage("STM|Right");
+                    System.out.println(Arrays.toString(gridMap.getCurCoord()));
                 }
                 else
                     updateStatus("Please press 'STARTING POINT'");
@@ -248,7 +250,7 @@ public class ControlFragment extends Fragment {
                 else if (fastestToggleBtn.getText().equals("STOP")) {
                     showToast("Fastest car timer start!");
                     try {
-                        MainActivity.printMessage("STM|G");
+                        MainActivity.printMessage("STM|Start");
                     } catch (Exception e) {
                         showLog(e.getMessage());
                     }
@@ -274,6 +276,21 @@ public class ControlFragment extends Fragment {
                     exploreButton.toggle();
                 timerHandler.removeCallbacks(timerRunnableExplore);
                 showLog("Exiting exploreResetImageBtn");
+            }
+        });
+
+        fastestResetButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showLog("Clicjed fatestResetImgBtn");
+                showToast("Resetting Fastest Time...");
+                fastestTimeTextView.setText("00:00");
+                robotStatusTextView.setText("Fastest Car Finished");
+                if(fastestButton.isChecked()){
+                    fastestButton.toggle();
+                }
+                timerHandler.removeCallbacks(timerRunnableFastest);
+                showLog("Exiting fastestResetImgBtn");
             }
         });
 
