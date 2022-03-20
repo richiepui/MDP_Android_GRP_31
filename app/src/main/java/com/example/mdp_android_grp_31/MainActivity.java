@@ -13,14 +13,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,15 +28,11 @@ import com.example.mdp_android_grp_31.ui.main.BluetoothPopUp;
 import com.example.mdp_android_grp_31.ui.main.BluetoothChatFragment;
 import com.example.mdp_android_grp_31.ui.main.ControlFragment;
 import com.example.mdp_android_grp_31.ui.main.GridMap;
+import com.example.mdp_android_grp_31.ui.main.MapTabFragment;
 import com.example.mdp_android_grp_31.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private static Context context;
 
     private static GridMap gridMap;
-    private ControlFragment controlFragment;
     static TextView xAxisTextView, yAxisTextView, directionAxisTextView;
     static TextView robotStatusTextView, bluetoothStatus, bluetoothDevice;
     static ImageButton upBtn, downBtn, leftBtn, rightBtn;
@@ -59,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private static UUID myUUID;
     ProgressDialog myDialog;
 
-    String obstacleID = "4";
-    String imageID = "";
+    String obstacleID;
 
     private static final String TAG = "Main Activity";
     public static boolean stopTimerFlag = false;
@@ -72,11 +65,14 @@ public class MainActivity extends AppCompatActivity {
         // Initialization
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        sectionsPagerAdapter.addFragment(new BluetoothChatFragment(),"CHAT");
+        sectionsPagerAdapter.addFragment(new MapTabFragment(),"MAP CONFIG");
+        sectionsPagerAdapter.addFragment(new ControlFragment(),"CHALLENGE");
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(9999);
+        viewPager.setOffscreenPageLimit(2);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         LocalBroadcastManager
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up sharedPreferences
         MainActivity.context = getApplicationContext();
-        this.sharedPreferences();
+        sharedPreferences();
         editor.putString("message", "");
         editor.putString("direction","None");
         editor.putString("connStatus", "Disconnected");
@@ -112,14 +108,11 @@ public class MainActivity extends AppCompatActivity {
         yAxisTextView = findViewById(R.id.yAxisTextView);
         directionAxisTextView = findViewById(R.id.directionAxisTextView);
 
-        // ControlFragment for Timer
-        controlFragment = new ControlFragment();
-
         // initialize ITEM_LIST and imageBearings strings
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 gridMap.ITEM_LIST.get(i)[j] = "";
-                gridMap.imageBearings.get(i)[j] = "";
+                GridMap.imageBearings.get(i)[j] = "";
             }
         }
 
@@ -150,14 +143,11 @@ public class MainActivity extends AppCompatActivity {
     public static GridMap getGridMap() {
         return gridMap;
     }
-
     public static TextView getRobotStatusTextView() {  return robotStatusTextView; }
-
     public static ImageButton getUpBtn() { return upBtn; }
     public static ImageButton getDownBtn() { return downBtn; }
     public static ImageButton getLeftBtn() { return leftBtn; }
     public static ImageButton getRightBtn() { return rightBtn; }
-
     public static TextView getBluetoothStatus() { return bluetoothStatus; }
     public static TextView getConnectedDevice() { return bluetoothDevice; }
 
@@ -175,12 +165,9 @@ public class MainActivity extends AppCompatActivity {
             byte[] bytes = strArr[1].getBytes(Charset.defaultCharset());
             BluetoothConnectionService.write(bytes);
         }
-
         refreshMessageReceivedNS("Untranslated Coordinates: " + strArr[0] + "\n");
         refreshMessageReceivedNS("Translated Coordinates: "+strArr[1]);
         showLog("Exiting printCoords");
-
-
     }
 
     // Send message to bluetooth
@@ -188,55 +175,17 @@ public class MainActivity extends AppCompatActivity {
         showLog("Entering printMessage");
         editor = sharedPreferences.edit();
 
-        if (BluetoothConnectionService.BluetoothConnectionStatus == true) {
+        if (BluetoothConnectionService.BluetoothConnectionStatus) {
             byte[] bytes = message.getBytes(Charset.defaultCharset());
             BluetoothConnectionService.write(bytes);
         }
         showLog(message);
-//        editor.putString("message",
-//            BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
-//        editor.commit();
         refreshMessageReceivedNS(message);
-        showLog("Exiting printMessage");
-    }
-
-    // Store received message into string
-    public static void printMessage(String name, int x, int y) throws JSONException {
-        showLog("Entering printMessage");
-        sharedPreferences();
-
-        JSONObject jsonObject = new JSONObject();
-        String message;
-
-        switch(name) {
-            case "waypoint":
-                jsonObject.put(name, name);
-                jsonObject.put("x", x);
-                jsonObject.put("y", y);
-                message = name + " (" + x + "," + y + ")";
-                break;
-            default:
-                message = "Unexpected default for printMessage: " + name;
-                break;
-        }
-        editor.putString("message",
-                BluetoothChatFragment.getMessageReceivedTextView().getText() + "\n" + message);
-        editor.commit();
-        if (BluetoothConnectionService.BluetoothConnectionStatus == true) {
-            byte[] bytes = message.getBytes(Charset.defaultCharset());
-            BluetoothConnectionService.write(bytes);
-        }
         showLog("Exiting printMessage");
     }
 
     public static void refreshMessageReceivedNS(String message){
         BluetoothChatFragment.getMessageReceivedTextView().append(message+ "\n");
-    }
-
-    public static void refreshMessageReceived() {
-        BluetoothChatFragment
-                .getMessageReceivedTextView()
-                .setText(sharedPreferences.getString("message", ""));
     }
 
     public void refreshDirection(String direction) {
@@ -251,15 +200,6 @@ public class MainActivity extends AppCompatActivity {
         directionAxisTextView.setText(sharedPreferences.getString("direction",""));
     }
 
-    public static void receiveMessage(String message) {
-        showLog("Entering receiveMessage");
-        sharedPreferences();
-        editor.putString("message",
-                sharedPreferences.getString("message", "") + "\n" + message);
-        editor.commit();
-        showLog("Exiting receiveMessage");
-    }
-
     private static void showLog(String message) {
         Log.d(TAG, message);
     }
@@ -268,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         return context.getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
     }
 
-    private BroadcastReceiver mBroadcastReceiver5 = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReceiver5 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             BluetoothDevice mDevice = intent.getParcelableExtra("Device");
@@ -402,33 +342,45 @@ public class MainActivity extends AppCompatActivity {
                                 int xCoordCheck = getCurCoords[0];
                                 int yCoordCheck = getCurCoords[1];
                                 int compensation = 0;
-                                for (int j= xCoordCheck; j<19; j++){
-                                    if (j == getSingleObstacle[0] && (yCoordCheck) == getSingleObstacle[1]){
-                                        compensation+=1;
+                                if (getSingleObstacle!=null) {
+                                    for (int j = xCoordCheck; j < 19; j++) {
+                                        if (j == getSingleObstacle[0] && (yCoordCheck) == getSingleObstacle[1]) {
+                                            compensation += 1;
+                                        }
                                     }
-                                }
-                                int counterCompensation = compensation;
-                                if (compensation > 0){
-                                    for (int k=0; k<compensation; k++){
-                                        int[] yMoveCoords = gridMap.getCurCoord();
+                                    int counterCompensation = compensation;
+                                    if (compensation > 0) {
+                                        for (int k = 0; k < compensation; k++) {
+                                            int[] yMoveCoords = gridMap.getCurCoord();
+                                            direction = gridMap.getRobotDirection();
+                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] - 1, direction);
+                                        }
+                                    }
+                                    for (int j = 0; j < result_x; j++) {
+                                        int[] xMoveCoords = gridMap.getCurCoord();
                                         direction = gridMap.getRobotDirection();
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1]-1, direction);
+                                        if (!checkIfXWithinGrid(xMoveCoords[0] + 1)) {
+                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        } else {
+                                            gridMap.performAlgoCommand(xMoveCoords[0] + 1, xMoveCoords[1], direction);
+                                        }
+                                    }
+                                    if (counterCompensation > 0) {
+                                        for (int k = 0; k < counterCompensation; k++) {
+                                            int[] yMoveCoords = gridMap.getCurCoord();
+                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] + 1, "up");
+                                        }
                                     }
                                 }
-                                for (int j = 0; j < result_x; j++) {
-                                    int[] xMoveCoords = gridMap.getCurCoord();
-                                    direction = gridMap.getRobotDirection();
-                                    if(!checkIfXWithinGrid(xMoveCoords[0]+1)) {
-                                        gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
-                                    }
-                                    else{
-                                        gridMap.performAlgoCommand(xMoveCoords[0]+1, xMoveCoords[1], direction);
-                                    }
-                                }
-                                if (counterCompensation>0){
-                                    for (int k = 0; k< counterCompensation; k++){
-                                        int []yMoveCoords = gridMap.getCurCoord();
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1]+1, "up");
+                                else{
+                                    for (int j = 0; j < result_x; j++) {
+                                        int[] xMoveCoords = gridMap.getCurCoord();
+                                        direction = gridMap.getRobotDirection();
+                                        if (!checkIfXWithinGrid(xMoveCoords[0] + 1)) {
+                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        } else {
+                                            gridMap.performAlgoCommand(xMoveCoords[0] + 1, xMoveCoords[1], direction);
+                                        }
                                     }
                                 }
                                 break;
@@ -572,13 +524,13 @@ public class MainActivity extends AppCompatActivity {
                     ControlFragment.timerHandler.removeCallbacks(ControlFragment.timerRunnableFastest);
                 }
             }
-            for (int i=0; i<mapCoord.size();i++){
-                System.out.println(mapCoord.get(i));
-            }
         }
     };
 
     public int[] getClosestObstacle(ArrayList<int[]> obstacleList, int[] getCurCoords) {
+        if(obstacleList.size()==0){
+            return null;
+        }
         int coords_X = getCurCoords[0];
         int coords_Y = getCurCoords[1];
         int smallest_index = 0;
@@ -613,7 +565,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case 1:
                 if(resultCode == Activity.RESULT_OK){
-                    mBTDevice = (BluetoothDevice) data.getExtras().getParcelable("mBTDevice");
+                    mBTDevice = data.getExtras().getParcelable("mBTDevice");
                     myUUID = (UUID) data.getSerializableExtra("myUUID");
                 }
         }

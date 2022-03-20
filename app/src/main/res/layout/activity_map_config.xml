@@ -19,6 +19,7 @@
                 android:layout_width="160dp"
                 android:layout_height="350dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <ToggleButton
@@ -27,7 +28,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
-                    android:textOff="SET STARTPOINT"
+                    android:paddingStart="5dp"
+                    android:textOff="SET START POINT"
+                    android:drawableStart="@mipmap/dragon"
+                    android:background="@drawable/border_black_state"
                     android:textOn="CANCEL" />
 
                 <LinearLayout
@@ -38,21 +42,23 @@
 
                     <ImageButton
                         android:id="@+id/changeDirectionBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="15dp"
-                        android:contentDescription="TODO"
-                        app:srcCompat="@drawable/baseline_explore_24"/>
+                        android:background="@drawable/border_black_state"
+                        app:srcCompat="@mipmap/compass"
+                        android:scaleType="centerCrop"/>
 
                     <ImageButton
                         android:id="@+id/addObstacleBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="36dp"
                         android:layout_marginTop="15dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/waypointToggleBtn"
-                        app:srcCompat="@drawable/baseline_dangerous_24" />
+                        android:background="@drawable/border_black_state"
+                        app:srcCompat="@mipmap/red_traffic_cone"
+                        android:scaleType="centerCrop"/>
                 </LinearLayout>
 
                 <Button
@@ -61,24 +67,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
+                    android:drawableStart="@mipmap/fat_dragon"
+                    android:paddingStart="5dp"
+                    android:background="@drawable/border_black_state"
                     android:text="Reset Map" />
                 <Button
                     android:id="@+id/saveBtn"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:drawableStart="@mipmap/stormfly"
                     android:layout_marginTop="15dp"
-                    android:text="Save Map Obstacles" />
+                    android:background="@drawable/border_black"
+                    android:paddingEnd="7dp"
+                    android:text="Save Map" />
                 <Button
                     android:id="@+id/loadBtn"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
-                    android:text="Load Saved Obstacles" />
-
+                    android:background="@drawable/border_black_state"
+                    android:paddingStart="5dp"
+                    android:drawableLeft="@mipmap/two_head_dragon"
+                    android:text="Load Map" />
             </LinearLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="200dp"
@@ -86,94 +101,63 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="180dp"
-                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_height="30dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="@drawable/border_black">
 
-                <TextView
-                    android:id="@+id/tv_imageID2"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:text="Image ID:" />
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:id="@+id/textView_changeObstacle"
+                        android:layout_width="115dp"
+                        android:layout_height="24dp"
+                        android:textColor="@color/colorBlack"
+                        android:text="Change Obstacle: " />
 
-                <Spinner
-                    android:id="@+id/imageIDSpinner"
-                    android:layout_width="80dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="40dp"/>
+                    <Switch
+                        android:id="@+id/changeObstacleSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp" />
 
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/textView_drag"
+                        android:layout_width="34dp"
+                        android:textColor="@color/colorBlack"
+                        android:layout_height="wrap_content"
+                        android:text="Drag: " />
+
+                    <Switch
+                        android:id="@+id/dragSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="97dp" />
+
+                </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="180dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_height="30dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_imageBearing2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Image Bearing:" />
-
-                <Spinner
-                    android:id="@+id/bearingSpinner"
-                    android:layout_width="80dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="3dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:id="@+id/textView_changeObstacle"
-                    android:layout_width="115dp"
-                    android:layout_height="24dp"
-                    android:text="Change Obstacle:" />
-
-                <Switch
-                    android:id="@+id/changeObstacleSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:id="@+id/textView_drag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Drag:" />
-
-                <Switch
-                    android:id="@+id/dragSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="87dp" />
-            </LinearLayout>
-
             <Button
                 android:id="@+id/updateMapBtn"
-                android:layout_width="190dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="13dp"
-                android:text="Preload Default Obstacles" />
+                android:paddingEnd="10dp"
+                android:background="@drawable/border_black_state"
+                android:drawableStart="@mipmap/l7"
+                android:text="Preload Defaults" />
         </LinearLayout>
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

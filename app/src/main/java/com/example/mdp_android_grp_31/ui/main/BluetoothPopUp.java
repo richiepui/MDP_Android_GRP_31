@@ -88,18 +88,18 @@ public class BluetoothPopUp extends AppCompatActivity {
         int height = dm.heightPixels;
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        Switch bluetoothSwitch = (Switch) findViewById(R.id.bluetoothSwitch);
+        Switch bluetoothSwitch = findViewById(R.id.bluetoothSwitch);
         if(mBluetoothAdapter.isEnabled()){
             bluetoothSwitch.setChecked(true);
             bluetoothSwitch.setText("ON");
         }
 
-        otherDevicesListView = (ListView) findViewById(R.id.otherDevicesListView);
-        pairedDevicesListView = (ListView) findViewById(R.id.pairedDevicesListView);
+        otherDevicesListView = findViewById(R.id.otherDevicesListView);
+        pairedDevicesListView = findViewById(R.id.pairedDevicesListView);
         mNewBTDevices = new ArrayList<>();
         mPairedBTDevices = new ArrayList<>();
 
-        connectBtn = (Button) findViewById(R.id.connectBtn);
+        connectBtn = findViewById(R.id.connectBtn);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver4, filter);
@@ -206,7 +206,7 @@ public class BluetoothPopUp extends AppCompatActivity {
 
         Button backBtn = findViewById(R.id.backBtn);
 
-        connStatusTextView = (TextView) findViewById(R.id.connStatusTextView);
+        connStatusTextView = findViewById(R.id.connStatusTextView);
         connStatus ="Disconnected";
         sharedPreferences = getApplicationContext().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("connStatus"))
@@ -286,13 +286,13 @@ public class BluetoothPopUp extends AppCompatActivity {
             }
         } else {
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
-
         }
     }
+
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(mBluetoothAdapter.ACTION_STATE_CHANGED)) {
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
 
                 switch (state) {
@@ -317,7 +317,7 @@ public class BluetoothPopUp extends AppCompatActivity {
     private final BroadcastReceiver mBroadcastReceiver2 = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(mBluetoothAdapter.ACTION_SCAN_MODE_CHANGED)) {
+            if (action.equals(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)) {
                 final int mode = intent.getIntExtra(BluetoothAdapter.EXTRA_SCAN_MODE, BluetoothAdapter.ERROR);
 
                 switch (mode) {
@@ -341,7 +341,7 @@ public class BluetoothPopUp extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -359,7 +359,7 @@ public class BluetoothPopUp extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver mBroadcastReceiver4 = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReceiver4 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -384,7 +384,7 @@ public class BluetoothPopUp extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver mBroadcastReceiver5 = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReceiver5 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             BluetoothDevice mDevice = intent.getParcelableExtra("Device");
@@ -439,9 +439,7 @@ public class BluetoothPopUp extends AppCompatActivity {
 
     public void startBTConnection(BluetoothDevice device, UUID uuid){
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection");
-
         mBluetoothConnection.startClientThread(device, uuid);
-
     }
 
     @Override

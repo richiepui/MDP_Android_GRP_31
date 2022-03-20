@@ -2,77 +2,46 @@ package com.example.mdp_android_grp_31.ui.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.example.mdp_android_grp_31.MainActivity;
 import com.example.mdp_android_grp_31.R;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
 public class MapTabFragment extends Fragment {
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String TAG = "MapFragment";
-
-    private PageViewModel pageViewModel;
 
     SharedPreferences mapPref;
     private static SharedPreferences.Editor editor;
 
     Button resetMapBtn, updateButton, saveMapObstacle, loadMapObstacle;
-    ImageButton directionChangeImageBtn, exploredImageBtn, obstacleImageBtn, clearImageBtn;
-    ToggleButton setStartPointToggleBtn, setWaypointToggleBtn;
-    Switch manualAutoToggleBtn;
+    ImageButton directionChangeImageBtn, obstacleImageBtn;
+    ToggleButton setStartPointToggleBtn;
     GridMap gridMap;
 
     Switch dragSwitch;
     Switch changeObstacleSwitch;
-    Spinner spinner_imageID;
-    Spinner spinner_imageBearing;
-    private static boolean autoUpdate = false;
 
     static String imageID;
     static String imageBearing;
     static boolean dragStatus;
     static boolean changeObstacleStatus;
 
-    public static MapTabFragment newInstance(int index) {
-        MapTabFragment fragment = new MapTabFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_SECTION_NUMBER, index);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
     }
 
     @Override
@@ -86,53 +55,14 @@ public class MapTabFragment extends Fragment {
 
         resetMapBtn = root.findViewById(R.id.resetBtn);
         setStartPointToggleBtn = root.findViewById(R.id.startpointToggleBtn);
-        setWaypointToggleBtn = root.findViewById(R.id.waypointToggleBtn);
         directionChangeImageBtn = root.findViewById(R.id.changeDirectionBtn);
-        exploredImageBtn = root.findViewById(R.id.exploredImageBtn);
         obstacleImageBtn = root.findViewById(R.id.addObstacleBtn);
-        clearImageBtn = root.findViewById(R.id.clearImageBtn);
         updateButton = root.findViewById(R.id.updateMapBtn);
         saveMapObstacle = root.findViewById(R.id.saveBtn);
         loadMapObstacle = root.findViewById(R.id.loadBtn);
-
         dragSwitch = root.findViewById(R.id.dragSwitch);
         changeObstacleSwitch = root.findViewById(R.id.changeObstacleSwitch);
-        spinner_imageID = root.findViewById(R.id.imageIDSpinner);
-        spinner_imageBearing = root.findViewById(R.id.bearingSpinner);
-        spinner_imageID.setEnabled(false);
-        spinner_imageBearing.setEnabled(false);
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        // Specify the layout to use when the list of choices appears
-        // Apply the adapter to the spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
-                R.array.imageID_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_imageID.setAdapter(adapter);
-
-        // Repeat for imageBearing
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this.getContext(),
-                R.array.imageBearing_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_imageBearing.setAdapter(adapter2);
-
-        spinner_imageID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> a, View v, int pos, long arg3) {
-                imageID = a.getItemAtPosition(pos).toString();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> a) { }
-        });
-
-        spinner_imageBearing.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> a, View v, int pos, long arg3) {
-                imageBearing = a.getItemAtPosition(pos).toString();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> a) { }
-        });
 
         resetMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,10 +79,7 @@ public class MapTabFragment extends Fragment {
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
                 showToast("Dragging is " + (isChecked ? "on" : "off"));
                 dragStatus = isChecked;
-                if (dragStatus == true) {
-                    // disable imageID and imageBearing and disable setObstacle when drag is on
-                    spinner_imageID.setEnabled(false);
-                    spinner_imageBearing.setEnabled(false);
+                if (dragStatus) {
                     gridMap.setSetObstacleStatus(false);
                     changeObstacleSwitch.setChecked(false);
                 }
@@ -165,10 +92,7 @@ public class MapTabFragment extends Fragment {
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
                 showToast("Changing Obstacle is " + (isChecked ? "on" : "off"));
                 changeObstacleStatus = isChecked;
-                if (changeObstacleStatus == true) {
-                    // disable dragging, imageID and imageBearing and disable setObstacle
-                    spinner_imageID.setEnabled(false);
-                    spinner_imageBearing.setEnabled(false);
+                if (changeObstacleStatus) {
                     gridMap.setSetObstacleStatus(false);
                     dragSwitch.setChecked(false);
                 }
@@ -181,8 +105,7 @@ public class MapTabFragment extends Fragment {
                 showLog("Clicked setStartPointToggleBtn");
                 if (setStartPointToggleBtn.getText().equals("STARTING POINT"))
                     showToast("Cancelled selecting starting point");
-                else if (setStartPointToggleBtn.getText().equals("CANCEL")
-                        && !gridMap.getAutoUpdate()) {
+                else if (setStartPointToggleBtn.getText().equals("CANCEL")) {
                     showToast("Please select starting point");
                     gridMap.setStartCoordStatus(true);
                     gridMap.toggleCheckedBtn("setStartPointToggleBtn");
@@ -213,31 +136,34 @@ public class MapTabFragment extends Fragment {
             public void onClick(View view) {
                 mapPref = getContext().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
                 String obsPos = mapPref.getString("maps","");
-                String[] obstaclePosition = obsPos.split("\\|");
-                for (String s : obstaclePosition) {
-                    String[] coords = s.split(",");
-                    gridMap.setObstacleCoord(Integer.parseInt(coords[0])+1, Integer.parseInt(coords[1])+1);
-                    String direction = "";
-                    switch (coords[2]) {
-                        case "N":
-                            direction = "North";
-                            break;
-                        case "E":
-                            direction = "East";
-                            break;
-                        case "W":
-                            direction = "West";
-                            break;
-                        case "S":
-                            direction = "South";
-                            break;
-                        default:
-                            direction = "";
+                if(obsPos.equals("")){}
+                else{
+                    String[] obstaclePosition = obsPos.split("\\|");
+                    for (String s : obstaclePosition) {
+                        String[] coords = s.split(",");
+                        gridMap.setObstacleCoord(Integer.parseInt(coords[0]) + 1, Integer.parseInt(coords[1]) + 1);
+                        String direction = "";
+                        switch (coords[2]) {
+                            case "N":
+                                direction = "North";
+                                break;
+                            case "E":
+                                direction = "East";
+                                break;
+                            case "W":
+                                direction = "West";
+                                break;
+                            case "S":
+                                direction = "South";
+                                break;
+                            default:
+                                direction = "";
+                        }
+                        gridMap.imageBearings.get(Integer.parseInt(coords[1]))[Integer.parseInt(coords[0])] = direction;
                     }
-                    gridMap.imageBearings.get(Integer.parseInt(coords[1]))[Integer.parseInt(coords[0])] = direction;
+                    gridMap.invalidate();
+                    showLog("Exiting Load Button");
                 }
-                gridMap.invalidate();
-                showLog("Exiting Load Button");
             }
         });
 
@@ -260,14 +186,10 @@ public class MapTabFragment extends Fragment {
                 if (!gridMap.getSetObstacleStatus()) {
                     showToast("Please plot obstacles");
                     gridMap.setSetObstacleStatus(true);
-                    spinner_imageID.setEnabled(true);
-                    spinner_imageBearing.setEnabled(true);
                     gridMap.toggleCheckedBtn("obstacleImageBtn");
                 }
                 else if (gridMap.getSetObstacleStatus()) {
                     gridMap.setSetObstacleStatus(false);
-                    spinner_imageID.setEnabled(false);
-                    spinner_imageBearing.setEnabled(false);
                 }
 
                 changeObstacleSwitch.setChecked(false);
@@ -292,7 +214,6 @@ public class MapTabFragment extends Fragment {
                 gridMap.setObstacleCoord(7+1, 14+1);
                 gridMap.setObstacleCoord(15+1, 4+1);
                 gridMap.setObstacleCoord(12+1, 9+1);
-
                 gridMap.invalidate();
                 showLog("Exiting updateButton");
             }

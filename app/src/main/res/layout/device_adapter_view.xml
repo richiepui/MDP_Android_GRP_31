@@ -12,7 +12,6 @@
         android:gravity="center"
         android:textSize="20sp" />
 
-
     <TextView
         android:id="@+id/deviceAddress"
         android:layout_width="match_parent"

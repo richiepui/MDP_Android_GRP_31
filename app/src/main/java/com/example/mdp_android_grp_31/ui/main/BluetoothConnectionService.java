@@ -23,10 +23,8 @@ import java.nio.charset.Charset;
 import java.util.UUID;
 
 public class BluetoothConnectionService {
-    BluetoothPopUp mBluetoothPopup;
-    private static BluetoothConnectionService instance;
-    private static final String TAG = "DebuggingTag";
 
+    private static final String TAG = "DebuggingTag";
     private static final String appName = "MDP_Group_31";
     public static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -40,8 +38,7 @@ public class BluetoothConnectionService {
     private UUID deviceUUID;
     ProgressDialog mProgressDialog;
     Intent connectionStatus;
-
-    int i;
+    
     public static boolean BluetoothConnectionStatus=false;
     private static ConnectedThread mConnectedThread;
 
@@ -160,10 +157,13 @@ public class BluetoothConnectionService {
     public synchronized void startAcceptThread(){
         Log.d(TAG, "start");
 
+        //Cancel any thread attempting to make a connection
         if(mConnectThread!=null){
             mConnectThread.cancel();
             mConnectThread=null;
         }
+
+        //If accept thread is null we want to start a new one
         if(mInsecureAcceptThread == null){
             mInsecureAcceptThread = new AcceptThread();
             mInsecureAcceptThread.start();
@@ -172,14 +172,11 @@ public class BluetoothConnectionService {
 
     public void startClientThread(BluetoothDevice device, UUID uuid){
         Log.d(TAG, "startClient: Started.");
-
         try {
             mProgressDialog = ProgressDialog.show(mContext, "Connecting Bluetooth", "Please Wait...", true);
         } catch (Exception e) {
             Log.d(TAG, "StartClientThread Dialog show failure");
         }
-
-
         mConnectThread = new ConnectThread(device, uuid);
         mConnectThread.start();
     }

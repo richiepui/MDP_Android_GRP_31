@@ -2,7 +2,6 @@ package com.example.mdp_android_grp_31.ui.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,34 +9,20 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-
 import com.example.mdp_android_grp_31.MainActivity;
 import com.example.mdp_android_grp_31.R;
 
 
 public class ControlFragment extends Fragment {
-    // Init
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String TAG = "ControlFragment";
-    private PageViewModel pageViewModel;
 
-    // Declaration Variable
-    // Shared Preferences
     SharedPreferences sharedPreferences;
 
     // Control Button
@@ -51,7 +36,6 @@ public class ControlFragment extends Fragment {
     // Timer
     public static Handler timerHandler = new Handler();
 
-
     public Runnable timerRunnableExplore = new Runnable() {
         @Override
         public void run() {
@@ -60,7 +44,7 @@ public class ControlFragment extends Fragment {
             int minutesExplore = secondsExplore / 60;
             secondsExplore = secondsExplore % 60;
 
-            if (MainActivity.stopTimerFlag == false) {
+            if (!MainActivity.stopTimerFlag) {
                 exploreTimeTextView.setText(String.format("%02d:%02d", minutesExplore,
                         secondsExplore));
                 timerHandler.postDelayed(this, 500);
@@ -76,7 +60,7 @@ public class ControlFragment extends Fragment {
             int minutesFastest = secondsFastest / 60;
             secondsFastest = secondsFastest % 60;
 
-            if (MainActivity.stopWk9TimerFlag == false) {
+            if (!MainActivity.stopWk9TimerFlag) {
                 fastestTimeTextView.setText(String.format("%02d:%02d", minutesFastest,
                         secondsFastest));
                 timerHandler.postDelayed(this, 500);
@@ -84,24 +68,10 @@ public class ControlFragment extends Fragment {
         }
     };
 
-    // Fragment Constructor
-    public static ControlFragment newInstance(int index) {
-        ControlFragment fragment = new ControlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_SECTION_NUMBER, index);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
     }
 
     @Override
@@ -136,9 +106,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showLog("Clicked moveForwardImageBtn");
-                if (gridMap.getAutoUpdate())
-                    updateStatus("Please press 'MANUAL'");
-                else if (gridMap.getCanDrawRobot() && !gridMap.getAutoUpdate()) {
+                if (gridMap.getCanDrawRobot()) {
                     gridMap.moveRobot("forward");
                     MainActivity.refreshLabel();
                     if (gridMap.getValidPosition())
@@ -157,9 +125,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showLog("Clicked turnRightImageBtn");
-                if (gridMap.getAutoUpdate())
-                    updateStatus("Please press 'MANUAL'");
-                else if (gridMap.getCanDrawRobot() && !gridMap.getAutoUpdate()) {
+                if (gridMap.getCanDrawRobot()) {
                     gridMap.moveRobot("right");
                     MainActivity.refreshLabel();
                     MainActivity.printMessage("STM|Right");
@@ -175,9 +141,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showLog("Clicked moveBackwardImageBtn");
-                if (gridMap.getAutoUpdate())
-                    updateStatus("Please press 'MANUAL'");
-                else if (gridMap.getCanDrawRobot() && !gridMap.getAutoUpdate()) {
+                if (gridMap.getCanDrawRobot()) {
                     gridMap.moveRobot("back");
                     MainActivity.refreshLabel();
                     if (gridMap.getValidPosition())
@@ -196,9 +160,7 @@ public class ControlFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showLog("Clicked turnLeftImageBtn");
-                if (gridMap.getAutoUpdate())
-                    updateStatus("Please press 'MANUAL'");
-                else if (gridMap.getCanDrawRobot() && !gridMap.getAutoUpdate()) {
+                if (gridMap.getCanDrawRobot()) {
                     gridMap.moveRobot("left");
                     MainActivity.refreshLabel();
                     updateStatus("turning left");
@@ -315,9 +277,4 @@ public class ControlFragment extends Fragment {
         toast.setGravity(Gravity.TOP,0, 0);
         toast.show();
     }
-
-    private static void schedulingTimer(){
-
-    }
-
 }

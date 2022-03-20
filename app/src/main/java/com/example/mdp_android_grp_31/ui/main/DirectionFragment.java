@@ -13,16 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
-
 import com.example.mdp_android_grp_31.MainActivity;
 import com.example.mdp_android_grp_31.R;
 
 public class DirectionFragment extends DialogFragment {
 
     private static final String TAG = "DirectionFragment";
-    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     Button saveBtn, cancelDirectionBtn;
@@ -37,7 +34,7 @@ public class DirectionFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         getDialog().setTitle("Change Direction");
-        sharedPreferences = getActivity().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Shared Preferences", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         saveBtn = rootView.findViewById(R.id.saveBtn);
