@@ -33,8 +33,8 @@ public class MapTabFragment extends Fragment {
     Switch dragSwitch;
     Switch changeObstacleSwitch;
 
-    static String imageID;
-    static String imageBearing;
+    static String imageID="";
+    static String imageBearing="North";
     static boolean dragStatus;
     static boolean changeObstacleStatus;
 
