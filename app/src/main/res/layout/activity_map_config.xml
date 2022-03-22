@@ -78,7 +78,7 @@
                     android:layout_marginStart="10dp"
                     android:drawableStart="@mipmap/stormfly"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/border_black"
+                    android:background="@drawable/border_black_state"
                     android:paddingEnd="7dp"
                     android:text="Save Map" />
                 <Button

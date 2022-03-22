@@ -45,7 +45,7 @@ public class GridMap extends View {
 
     private final Paint blackPaint = new Paint();
     private final Paint whitePaint = new Paint();
-    private final Paint redPaint = new Paint();
+    private final Paint greenPaint = new Paint();
     private final Paint obstacleColor = new Paint();
     private final Paint robotColor = new Paint();
     private final Paint endColor = new Paint();
@@ -99,9 +99,9 @@ public class GridMap extends View {
         whitePaint.setColor(Color.WHITE);
         whitePaint.setTextSize(25);
         whitePaint.setTextAlign(Paint.Align.CENTER);
-        redPaint.setColor(Color.RED);
-        redPaint.setStrokeWidth(8);
-        obstacleColor.setColor(Color.BLACK);
+        greenPaint.setColor(getResources().getColor(R.color.grassColor));
+        greenPaint.setStrokeWidth(8);
+        obstacleColor.setColor(getResources().getColor(R.color.rockColor));
         robotColor.setColor(getResources().getColor(R.color.light_blue));
         robotColor.setStrokeWidth(2);
         endColor.setColor(Color.RED);
@@ -171,7 +171,7 @@ public class GridMap extends View {
                                 cells[j + 1][i].startY,
                                 cells[j + 1][20 - i].endX,
                                 cells[j + 1][i].startY,
-                                redPaint
+                                greenPaint
                         );
                         break;
                     case "South":
@@ -180,7 +180,7 @@ public class GridMap extends View {
                                 cells[j + 1][i].startY + cellSize,
                                 cells[j + 1][20 - i].endX,
                                 cells[j + 1][i].startY + cellSize,
-                                redPaint
+                                greenPaint
                         );
                         break;
                     case "East":
@@ -189,7 +189,7 @@ public class GridMap extends View {
                                 cells[j + 1][i].startY,
                                 cells[j + 1][20 - i].startX + cellSize,
                                 cells[j + 1][i].endY,
-                                redPaint
+                                greenPaint
                         );
                         break;
                     case "West":
@@ -198,7 +198,7 @@ public class GridMap extends View {
                                 cells[j + 1][i].startY,
                                 cells[j + 1][20 - i].startX,
                                 cells[j + 1][i].endY,
-                                redPaint
+                                greenPaint
                         );
                         break;
                 }

@@ -26,6 +26,14 @@
         <entry key="..\:/Users/User/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/bluetooth_pop_up_window.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/device_adapter_view.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/fragment_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_comms.xml" value="0.25" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_control.xml" value="0.4" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_direction.xml" value="0.25" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_map_config.xml" value="0.4" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/activity_splash_screen.xml" value="0.4" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/bluetooth_pop_up_window.xml" value="0.4" />
+        <entry key="..\:/Users/richi/StudioProjects/MDP_Android_GRP_31/app/src/main/res/layout/forfun.xml" value="0.25" />
         <entry key="app/src/main/res/drawable-v24/baseline_bluetooth_24.xml" value="0.2708333333333333" />
         <entry key="app/src/main/res/drawable-v24/baseline_dangerous_24.xml" value="0.2708333333333333" />
         <entry key="app/src/main/res/drawable-v24/baseline_explore_24.xml" value="0.2708333333333333" />

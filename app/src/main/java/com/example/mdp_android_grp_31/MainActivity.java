@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main Activity";
     public static boolean stopTimerFlag = false;
     public static boolean stopWk9TimerFlag = false;
+
+    private int g_coordX;
+    private int g_coordY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,14 +253,13 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra("receivedMessage");
             showLog("receivedMessage: message --- " + message);
-            int previous_x, previous_y;
+            int[] global_store = gridMap.getCurCoord();
+            g_coordX = global_store[0];
+            g_coordY = global_store[1];
             ArrayList<String> mapCoord = new ArrayList<>();
             if(message.contains("|")) {
                 String [] cmd = message.split("\\|");
                 for(int i =1; i<cmd.length; i++){
-                    int[] coords = gridMap.getCurCoord();
-                    previous_x = coords[0];
-                    previous_y = coords[1];
                     String[] sentCoords = cmd[i].split(",");
                     String direction = "";
                     switch(sentCoords[2]){
@@ -289,54 +292,63 @@ public class MainActivity extends AppCompatActivity {
                         current_y = 19 - Integer.parseInt(sentCoords[1]);
                     }
 
-                    if(current_x + 1 == previous_x){
+                    if(current_x + 1 == g_coordX){
                         if(!checkIfYWithinGrid(current_y+1)) {
-                            gridMap.performAlgoCommand(current_x+1, current_y, direction);
+                            String store = (current_x+1)+","+current_y+","+direction;
+                            updateCoord(current_x+1, current_y);
+                            mapCoord.add(store);
                         }
                         else{
-                            gridMap.performAlgoCommand(current_x+1, current_y + 1, direction);
+                            String store = (current_x+1)+","+(current_y+1)+","+direction;
+                            updateCoord(current_x+1, current_y+1);
+                            mapCoord.add(store);
                         }
                     }
-                    else if (current_y+1 == previous_y){
+                    else if (current_y+1 == g_coordY){
                         if(!checkIfXWithinGrid(current_x+1)){
-                            gridMap.performAlgoCommand(current_x, current_y+1, direction);
+                            String store = current_x+","+(current_y+1)+","+direction;
+                            updateCoord(current_x, current_y+1);
+                            mapCoord.add(store);
                         }
                         else{
-                            gridMap.performAlgoCommand(current_x+1, current_y+1, direction);
+                            String store = (current_x+1) +","+(current_y+1)+","+direction;
+                            updateCoord(current_x+1,current_y+1);
+                            mapCoord.add(store);
                         }
                     }
-
                     else{
-                        int result_x = current_x - (previous_x - 1);
-                        int result_y = current_y - (previous_y - 1);
-
+                        int result_x = current_x - (g_coordX - 1);
+                        int result_y = current_y - (g_coordY - 1);
                         switch (direction) {
                             case "E":
                                 if (result_y > 0) {
                                     for (int j = 0; j < result_y; j++) {
-                                        int[] yMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfYWithinGrid(yMoveCoords[1]+1)) {
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                        if(!checkIfYWithinGrid(g_coordY+1)) {
+                                            String store = g_coordX+","+g_coordY+","+"N";
+                                            updateCoord(g_coordX, g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] + 1, direction);
+                                            String store = g_coordX+","+(g_coordY+1)+","+"N";
+                                            updateCoord(g_coordX, g_coordY+1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 } else if (result_y < 0) {
                                     for (int j = result_y; j < 0; j++) {
-                                        int[] yMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfYWithinGrid(yMoveCoords[1]-1)){
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                        if(!checkIfYWithinGrid(g_coordY-1)){
+                                            String store = g_coordX+","+g_coordY+","+"S";
+                                            updateCoord(g_coordX, g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] - 1, direction);
+                                            String store = g_coordX+","+(g_coordY-1)+","+"S";
+                                            updateCoord(g_coordX, g_coordY-1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
-                                gridMap.setRobotDirection("right");
-                                int [] getCurCoords = gridMap.getCurCoord();
+                                int [] getCurCoords = {g_coordX, g_coordY};
                                 ArrayList<int[]> obstacleList = gridMap.getObstaclesList();
                                 int [] getSingleObstacle = getClosestObstacle(obstacleList, getCurCoords);
                                 int xCoordCheck = getCurCoords[0];
@@ -351,35 +363,40 @@ public class MainActivity extends AppCompatActivity {
                                     int counterCompensation = compensation;
                                     if (compensation > 0) {
                                         for (int k = 0; k < compensation; k++) {
-                                            int[] yMoveCoords = gridMap.getCurCoord();
-                                            direction = gridMap.getRobotDirection();
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] - 1, direction);
+                                            String store = g_coordX+","+ (g_coordY-1)+","+ "S";
+                                            updateCoord(g_coordX,g_coordY-1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                     for (int j = 0; j < result_x; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if (!checkIfXWithinGrid(xMoveCoords[0] + 1)) {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        if (!checkIfXWithinGrid(g_coordX + 1)) {
+                                            String store = g_coordX+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         } else {
-                                            gridMap.performAlgoCommand(xMoveCoords[0] + 1, xMoveCoords[1], direction);
+                                            String store = (g_coordX+1)+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX+1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                     if (counterCompensation > 0) {
                                         for (int k = 0; k < counterCompensation; k++) {
-                                            int[] yMoveCoords = gridMap.getCurCoord();
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] + 1, "up");
+                                            String store = g_coordX+","+(g_coordY+1)+","+"N";
+                                            updateCoord(g_coordX,g_coordY+1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
                                 else{
                                     for (int j = 0; j < result_x; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if (!checkIfXWithinGrid(xMoveCoords[0] + 1)) {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        if (!checkIfXWithinGrid(g_coordX + 1)) {
+                                            String store = g_coordX+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         } else {
-                                            gridMap.performAlgoCommand(xMoveCoords[0] + 1, xMoveCoords[1], direction);
+                                            String store = (g_coordX+1)+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX+1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
@@ -387,117 +404,148 @@ public class MainActivity extends AppCompatActivity {
                             case "W":
                                 if (result_y > 0) {
                                     for (int j = 0; j < result_y; j++) {
-                                        int[] yMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfYWithinGrid(yMoveCoords[1]+1)) {
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                        if(!checkIfYWithinGrid(g_coordY+1)) {
+                                            String store = g_coordX+","+g_coordY+","+"N";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] + 1, direction);
+                                            String store = g_coordX+","+(g_coordY+1)+","+"N";
+                                            updateCoord(g_coordX,g_coordY+1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 } else if (result_y < 0) {
                                     for (int j = result_y; j < 0; j++) {
-                                        int[] yMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfYWithinGrid(yMoveCoords[1]-1)){
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                        if(!checkIfYWithinGrid(g_coordY-1)){
+                                            String store = g_coordX+","+g_coordY+","+"S";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1] - 1, direction);
+                                            String store = g_coordX+","+(g_coordY-1)+","+"S";
+                                            updateCoord(g_coordX,g_coordY-1);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
-                                gridMap.setRobotDirection("left");
                                 for (int j = result_x; j < 0; j++) {
-                                    int[] xMoveCoords = gridMap.getCurCoord();
-                                    direction = gridMap.getRobotDirection();
-                                    if(!checkIfXWithinGrid(xMoveCoords[0]-1))
+                                    if(!checkIfXWithinGrid(g_coordX-1))
                                     {
-                                        gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        String store = g_coordX+","+g_coordY+","+"W";
+                                        updateCoord(g_coordX,g_coordY);
+                                        mapCoord.add(store);
                                     }
                                     else{
-                                        gridMap.performAlgoCommand(xMoveCoords[0]-1, xMoveCoords[1], direction);
+                                        String store = (g_coordX-1)+","+g_coordY+","+"W";
+                                        updateCoord(g_coordX-1,g_coordY);
+                                        mapCoord.add(store);
                                     }
                                 }
                                 break;
                             case "S":
                                 if (result_x > 0) {
                                     for (int j = 0; j < result_x; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfXWithinGrid(xMoveCoords[0]+1)) {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        if(!checkIfXWithinGrid(g_coordX+1)) {
+                                            String store = g_coordX+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(xMoveCoords[0]+1, xMoveCoords[1], direction);
+                                            String store = (g_coordX+1)+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX+1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 } else if (result_x < 0) {
                                     for (int j = result_x; j < 0; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfXWithinGrid(xMoveCoords[0]-1))
+                                        if(!checkIfXWithinGrid(g_coordX-1))
                                         {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                            String store = g_coordX+","+g_coordY+","+"W";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(xMoveCoords[0]-1, xMoveCoords[1], direction);
+                                            String store = (g_coordX-1)+","+g_coordY+","+"W";
+                                            updateCoord(g_coordX-1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
-                                gridMap.setRobotDirection("down");
                                 for (int j = result_y; j < 0; j++) {
-                                    int[] yMoveCoords = gridMap.getCurCoord();
-                                    direction = gridMap.getRobotDirection();
-                                    if(!checkIfYWithinGrid(yMoveCoords[1]-1)) {
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                    if(!checkIfYWithinGrid(g_coordY-1)) {
+                                        String store = g_coordX+","+g_coordY+","+"S";
+                                        updateCoord(g_coordX,g_coordY);
+                                        mapCoord.add(store);
                                     }
                                     else{
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1]-1, direction);
+                                        String store = g_coordX+","+(g_coordY-1)+","+"S";
+                                        updateCoord(g_coordX,g_coordY-1);
+                                        mapCoord.add(store);
                                     }
                                 }
                                 break;
                             case "N":
                                 if (result_x > 0) {
                                     for (int j = 0; j < result_x; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfXWithinGrid(xMoveCoords[0]+1)) {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                        if(!checkIfXWithinGrid(g_coordX+1)) {
+                                            String store = g_coordX+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(xMoveCoords[0]+1, xMoveCoords[1], direction);
+                                            String store = (g_coordX+1)+","+g_coordY+","+"E";
+                                            updateCoord(g_coordX+1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 } else if (result_x < 0) {
                                     for (int j = result_x; j < 0; j++) {
-                                        int[] xMoveCoords = gridMap.getCurCoord();
-                                        direction = gridMap.getRobotDirection();
-                                        if(!checkIfXWithinGrid(xMoveCoords[0]-1))
+                                        if(!checkIfXWithinGrid(g_coordX-1))
                                         {
-                                            gridMap.performAlgoCommand(xMoveCoords[0], xMoveCoords[1], direction);
+                                            String store = g_coordX+","+g_coordY+","+"W";
+                                            updateCoord(g_coordX,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                         else{
-                                            gridMap.performAlgoCommand(xMoveCoords[0]-1, xMoveCoords[1], direction);
+                                            String store = (g_coordX-1)+","+g_coordY+","+"W";
+                                            updateCoord(g_coordX-1,g_coordY);
+                                            mapCoord.add(store);
                                         }
                                     }
                                 }
-                                gridMap.setRobotDirection("up");
                                 for (int j = 0; j < result_y; j++) {
-                                    int[] yMoveCoords = gridMap.getCurCoord();
-                                    direction = gridMap.getRobotDirection();
-                                    if(!checkIfYWithinGrid(yMoveCoords[1]+1)) {
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1], direction);
+                                    if(!checkIfYWithinGrid(g_coordY+1)) {
+                                        String store = g_coordX+","+g_coordY+","+"N";
+                                        updateCoord(g_coordX,g_coordY);
+                                        mapCoord.add(store);
                                     }
                                     else{
-                                        gridMap.performAlgoCommand(yMoveCoords[0], yMoveCoords[1]+1, direction);
+                                        String store = g_coordX+","+(g_coordY+1)+","+"N";
+                                        updateCoord(g_coordX,g_coordY+1);
+                                        mapCoord.add(store);
                                     }
                                 }
                                 break;
                         }
                     }
                 }
+
+                int time = 0;
+                for (int i=0; i<mapCoord.size();i++){
+                    time+=200;
+                    String[] singleCoord = mapCoord.get(i).split(",");
+                    int coordx = Integer.parseInt(singleCoord[0]);
+                    int coordy = Integer.parseInt(singleCoord[1]);
+                    String dir = singleCoord[2];
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            gridMap.performAlgoCommand(coordx,coordy,dir);
+                        }
+                    },time);
+                }
+
             }
             //image format from RPI is "IMG-Obstacle ID-ImageID" eg IMG-3-7
             else if(message.contains("IMG")) {
@@ -554,6 +602,11 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean checkIfYWithinGrid(int coord){
         return coord > -1 && coord <20;
+    }
+
+    public void updateCoord(int coordX, int coordY){
+        g_coordX = coordX;
+        g_coordY = coordY;
     }
 
 
