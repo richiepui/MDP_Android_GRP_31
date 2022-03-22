@@ -385,7 +385,7 @@ public class GridMap extends View {
                     Toast.makeText(
                             this.getContext(),
                             "Error with drawing robot (unknown direction)",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                     ).show();
                     break;
             }

@@ -228,13 +228,13 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "mBroadcastReceiver5: Device now connected to "+mDevice.getName());
                 Toast.makeText(MainActivity.this, "Device now connected to "
-                        + mDevice.getName(), Toast.LENGTH_LONG).show();
+                        + mDevice.getName(), Toast.LENGTH_SHORT).show();
                 editor.putString("connStatus", "Connected to " + mDevice.getName());
             }
             else if(status.equals("disconnected")){
                 Log.d(TAG, "mBroadcastReceiver5: Disconnected from "+mDevice.getName());
                 Toast.makeText(MainActivity.this, "Disconnected from "
-                        + mDevice.getName(), Toast.LENGTH_LONG).show();
+                        + mDevice.getName(), Toast.LENGTH_SHORT).show();
 
                 editor.putString("connStatus", "Disconnected");
 

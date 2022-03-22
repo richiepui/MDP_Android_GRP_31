@@ -159,7 +159,7 @@ public class BluetoothPopUp extends AppCompatActivity {
 
                 if(mBluetoothAdapter ==null){
                     Log.d(TAG, "enableDisableBT: Device does not support Bluetooth capabilities!");
-                    Toast.makeText(BluetoothPopUp.this, "Device Does Not Support Bluetooth capabilities!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BluetoothPopUp.this, "Device Does Not Support Bluetooth capabilities!", Toast.LENGTH_SHORT).show();
                     compoundButton.setChecked(false);
                 }
                 else {
@@ -195,7 +195,7 @@ public class BluetoothPopUp extends AppCompatActivity {
             public void onClick(View view) {
                 if(mBTDevice ==null)
                 {
-                    Toast.makeText(BluetoothPopUp.this, "Please Select a Device before connecting.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BluetoothPopUp.this, "Please Select a Device before connecting.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     startConnection();
@@ -400,14 +400,14 @@ public class BluetoothPopUp extends AppCompatActivity {
                 }
 
                 Log.d(TAG, "mBroadcastReceiver5: Device now connected to "+mDevice.getName());
-                Toast.makeText(BluetoothPopUp.this, "Device now connected to "+mDevice.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(BluetoothPopUp.this, "Device now connected to "+mDevice.getName(), Toast.LENGTH_SHORT).show();
                 editor.putString("connStatus", "Connected to " + mDevice.getName());
                 connStatusTextView.setText("Connected to " + mDevice.getName());
 
             }
             else if(status.equals("disconnected") && retryConnection == false){
                 Log.d(TAG, "mBroadcastReceiver5: Disconnected from "+mDevice.getName());
-                Toast.makeText(BluetoothPopUp.this, "Disconnected from "+mDevice.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(BluetoothPopUp.this, "Disconnected from "+mDevice.getName(), Toast.LENGTH_SHORT).show();
                 mBluetoothConnection = new BluetoothConnectionService(BluetoothPopUp.this);
 //                mBluetoothConnection.startAcceptThread();
 
