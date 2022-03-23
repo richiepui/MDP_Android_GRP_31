@@ -36,7 +36,7 @@ public class ControlFragment extends Fragment {
     // Timer
     public static Handler timerHandler = new Handler();
 
-    public Runnable timerRunnableExplore = new Runnable() {
+    public static Runnable timerRunnableExplore = new Runnable() {
         @Override
         public void run() {
             long millisExplore = System.currentTimeMillis() - exploreTimer;

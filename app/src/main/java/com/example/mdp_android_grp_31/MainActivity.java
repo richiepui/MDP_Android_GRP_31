@@ -564,6 +564,7 @@ public class MainActivity extends AppCompatActivity {
                     stopTimerFlag = true;
                     exploreButton.setChecked(false);
                     robotStatusTextView.setText("Auto Movement/ImageRecog Stopped");
+                    ControlFragment.timerHandler.removeCallbacks(ControlFragment.timerRunnableExplore);
                 } else if (fastestButton.isChecked()) {
                     showLog("fastestbutton is checked");
                     stopTimerFlag = true;
